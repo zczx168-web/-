@@ -77,7 +77,7 @@ confirmSubscribe.addEventListener('click', () => {
   confirmSubscribe.hidden = true;
 });
 document.querySelector('#paymentDone').addEventListener('click', () => {
-  localStorage.setItem('coalMember', JSON.stringify(selectedPlan));
+  localStorage.setItem('coalPending', JSON.stringify(selectedPlan));
   closeModal('subscribeModal');
   paymentStep.hidden = true;
   confirmSubscribe.hidden = false;
@@ -88,4 +88,4 @@ document.querySelector('#loginButton').addEventListener('click', () => showToast
 document.querySelector('#clearWatch').addEventListener('click', () => showToast('关注列表已清空（测试）'));
 document.querySelector('.add-watch').addEventListener('click', () => showToast('添加合约功能将在接入数据源后开放'));
 
-if (localStorage.getItem('coalMember')) document.querySelector('.edition').innerHTML = '<i></i>会员测试中';
+if (localStorage.getItem('coalPending')) document.querySelector('.edition').innerHTML = '<i></i>待人工核验';
