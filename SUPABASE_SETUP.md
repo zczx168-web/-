@@ -40,3 +40,23 @@ Save the template, then request a new verification code from the production webs
 The current project sends eight-digit codes. Keep `Authentication > Sign In / Providers > Email > Email OTP length` set to `8` so it matches the website. The `{{ .Token }}` value comes from this setting; changing the email template text alone does not change the code length. Request a fresh code after saving because previously issued codes keep their original length.
 
 Run `supabase/schema.sql` in the Supabase SQL Editor after the project is created. It creates profiles, plans, subscriptions, payment requests, member content, watchlists, and Row Level Security policies.
+
+## Manual payment approval (beta)
+
+The website writes a row to `payment_requests` after a signed-in user scans a QR code and clicks the confirmation button. Review pending requests in the Supabase Table Editor, then run the following SQL in the SQL Editor with the request's `id`, `user_id`, and `plan_code`:
+
+```sql
+update public.payment_requests
+set status = 'approved'
+where id = '<payment_request_id>'
+  and status = 'pending';
+
+insert into public.subscriptions (user_id, plan_code, status, starts_at, ends_at)
+select user_id, plan_code, 'active', now(), now() + make_interval(days => plans.duration_days)
+from public.payment_requests
+join public.plans using (plan_code)
+where payment_requests.id = '<payment_request_id>'
+  and payment_requests.status = 'approved';
+```
+
+After approval, the user refreshes the website. Active subscriptions can read `content` rows with `visibility = 'member'`; expired or unapproved accounts cannot. Add member articles from the `content` table, for example with `category = 'briefing'` and `visibility = 'member'`.
