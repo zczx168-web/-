@@ -23,7 +23,9 @@ The publishable key is intended for browser use. Never put a database password o
 
 ## Chinese magic-link email
 
-In `Authentication > Email Templates > Magic Link`, set the subject to `焦煤观察登录链接` and replace the body with:
+Supabase requires Custom SMTP before editing email templates. In `Authentication > SMTP Settings`, configure a mailbox SMTP account first. For QQ Mail, use `smtp.qq.com` with port `465` (SSL) or `587` (STARTTLS); use the mailbox authorization code as the SMTP password. Do not use or share your normal mailbox password.
+
+After SMTP is saved, go to `Authentication > Email Templates > Magic Link`, set the subject to `焦煤观察登录验证码` and replace the body with:
 
 ```html
 <h2>登录焦煤观察</h2>
