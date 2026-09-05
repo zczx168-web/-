@@ -103,6 +103,11 @@ const loginEmail = document.querySelector('#loginEmail');
 const sendLoginLink = document.querySelector('#sendLoginLink');
 const signOutButton = document.querySelector('#signOutButton');
 const loginStatus = document.querySelector('#loginStatus');
+const domesticEmailDomains = [
+  'qq.com', 'foxmail.com', '163.com', '126.com', 'yeah.net', '139.com',
+  '189.cn', 'wo.cn', 'aliyun.com', 'sina.com', 'sina.cn', 'sohu.com',
+  '21cn.com', '263.net', 'mail.com.cn',
+];
 const supabaseConfig = window.SUPABASE_CONFIG || {};
 const supabaseClient = window.supabase && supabaseConfig.url && supabaseConfig.publishableKey
   ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.publishableKey)
@@ -126,6 +131,15 @@ sendLoginLink.addEventListener('click', async () => {
   const email = loginEmail.value.trim();
   if (!email || !loginEmail.checkValidity()) {
     loginStatus.textContent = '请输入有效的邮箱地址';
+    loginEmail.focus();
+    return;
+  }
+  const domain = email.toLowerCase().split('@').pop();
+  const isDomesticEmail = domesticEmailDomains.some((allowedDomain) => (
+    domain === allowedDomain || domain.endsWith(`.${allowedDomain}`)
+  ));
+  if (!isDomesticEmail) {
+    loginStatus.textContent = '目前仅支持 QQ、163、126、139、189 等国内邮箱';
     loginEmail.focus();
     return;
   }
