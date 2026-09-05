@@ -7,11 +7,11 @@ function showToast(message) {
   toastTimer = setTimeout(() => { toast.hidden = true; }, 2400);
 }
 
-const rows = [...document.querySelectorAll('.brief-row')];
 const search = document.querySelector('#briefSearch');
 let activeFilter = 'all';
 function renderBriefs() {
   const query = search.value.trim().toLowerCase();
+  const rows = [...document.querySelectorAll('.brief-row')];
   let visible = 0;
   rows.forEach((row) => {
     const matchesFilter = activeFilter === 'all' || row.dataset.type === activeFilter;
@@ -31,9 +31,69 @@ document.querySelectorAll('.filter-btn').forEach((button) => {
 });
 search.addEventListener('input', renderBriefs);
 
-document.querySelectorAll('.save-button').forEach((button) => {
-  button.addEventListener('click', () => toggleWatch(button));
-});
+const briefList = document.querySelector('#briefList');
+const briefAutoMeta = document.querySelector('#briefAutoMeta');
+const categoryLabels = { supply: '供应', demand: '需求', policy: '政策与口岸', market: '市场' };
+
+function renderAutoBrief(data) {
+  if (!Array.isArray(data.items) || !data.items.length) return;
+  briefList.replaceChildren();
+  data.items.slice(0, 12).forEach((item) => {
+    const row = document.createElement('article');
+    const category = item.category || 'policy';
+    row.className = 'brief-row';
+    row.dataset.type = category;
+    row.dataset.title = item.title;
+    const publishedAt = new Date(item.publishedAt || item.published_at || '');
+    const time = Number.isNaN(publishedAt.getTime())
+      ? '今日'
+      : publishedAt.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const timeEl = document.createElement('span');
+    timeEl.className = 'brief-time';
+    timeEl.textContent = time;
+    const copy = document.createElement('div');
+    copy.className = 'brief-copy';
+    const heading = document.createElement('div');
+    const tag = document.createElement('span');
+    tag.className = `tag tag-${category}`;
+    tag.textContent = categoryLabels[category] || '资讯';
+    const title = document.createElement('h3');
+    title.textContent = item.title;
+    heading.append(tag, title);
+    const summary = document.createElement('p');
+    summary.textContent = item.summary || `来源：${item.source || '公开信息'}`;
+    copy.append(heading, summary);
+    const save = document.createElement('button');
+    save.className = 'save-button';
+    save.type = 'button';
+    save.setAttribute('aria-label', `收藏${item.title}`);
+    save.textContent = '☆';
+    row.append(timeEl, copy, save);
+    briefList.append(row);
+  });
+  briefAutoMeta.textContent = data.generatedAt ? `自动汇总 · ${new Date(data.generatedAt).toLocaleString('zh-CN')}` : '自动汇总';
+  bindSaveButtons();
+  renderBriefs();
+}
+
+async function loadAutoBrief() {
+  try {
+    const response = await fetch(`data/daily-brief.json?v=${Date.now()}`, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    renderAutoBrief(await response.json());
+  } catch (error) {
+    briefAutoMeta.textContent = '公开信息整理';
+  }
+}
+
+function bindSaveButtons() {
+  document.querySelectorAll('.save-button').forEach((button) => {
+    if (button.dataset.watchBound) return;
+    button.dataset.watchBound = 'true';
+    button.addEventListener('click', () => toggleWatch(button));
+  });
+}
+bindSaveButtons();
 
 const modalIds = ['methodModal', 'subscribeModal', 'loginModal'];
 function openModal(id) {
@@ -403,4 +463,5 @@ document.querySelector('.add-watch').addEventListener('click', async () => {
   showToast(error ? `添加失败：${error.message}` : `已关注${label.trim()}`);
 });
 
+loadAutoBrief();
 if (localStorage.getItem('coalPending')) document.querySelector('.edition').innerHTML = '<i></i>订阅待核验';

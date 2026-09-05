@@ -60,3 +60,7 @@ where payment_requests.id = '<payment_request_id>'
 ```
 
 After approval, the user refreshes the website. Active subscriptions can read `content` rows with `visibility = 'member'`; expired or unapproved accounts cannot. Add member articles from the `content` table, for example with `category = 'briefing'` and `visibility = 'member'`.
+
+## Free public-source collector
+
+The GitHub Actions workflow at `.github/workflows/collect-daily.yml` runs at several Beijing-time windows and executes `scripts/collect_market_data.py`. It reads public pages from DCE, CCTD, the National Bureau of Statistics, Customs, and NDRC, then writes a deduplicated digest to `data/daily-brief.json`. The website loads this file into the public `焦煤快讯` panel. Run the workflow manually from the GitHub Actions tab to test it; scheduled runs may be delayed by GitHub and a source can be skipped when its public page is unavailable. The collector records such warnings in the JSON instead of fabricating data.

@@ -1,0 +1,38 @@
+name: Collect public coking coal data
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub Actions uses UTC. These run at 09:30, 16:30 and 18:30 Beijing time.
+    - cron: '30 1 * * 1-5'
+    - cron: '30 8 * * 1-5'
+    - cron: '30 10 * * 1-5'
+    # Monthly statistics window: 10:30 Beijing time on the 15th-20th.
+    - cron: '30 2 15-20 * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect-public-data
+  cancel-in-progress: true
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect public sources
+        run: python scripts/collect_market_data.py
+      - name: Publish changed digest
+        run: |
+          git config user.name 'coking-coal-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add data/daily-brief.json
+          git diff --cached --quiet || git commit -m "Update public coking coal digest"
+          git push
