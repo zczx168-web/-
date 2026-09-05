@@ -183,9 +183,15 @@ verifyLoginCode.addEventListener('click', async () => {
   }
   verifyLoginCode.disabled = true;
   loginStatus.textContent = '正在验证...';
-  const { error } = await supabaseClient.auth.verifyOtp({ email, token, type: 'email' });
+  const { data, error } = await supabaseClient.auth.verifyOtp({ email, token, type: 'email' });
   verifyLoginCode.disabled = false;
-  loginStatus.textContent = error ? '验证码无效或已过期，请重新获取' : '登录成功';
+  if (error) {
+    loginStatus.textContent = '验证码无效或已过期，请重新获取';
+    return;
+  }
+  renderAuthState(data.session);
+  closeModal('loginModal');
+  showToast('登录成功');
 });
 signOutButton.addEventListener('click', async () => {
   if (supabaseClient) await supabaseClient.auth.signOut();
