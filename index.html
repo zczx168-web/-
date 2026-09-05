@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="焦煤供需与资讯订阅测试版">
+  <title>焦煤观察 | Coking Coal Desk</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="焦煤观察首页"><span class="brand-mark">JM</span><span><strong>焦煤观察</strong><small>COKING COAL DESK</small></span></a>
+    <nav class="primary-nav" aria-label="主导航"><a class="active" href="#market">市场首页</a><a href="#briefs">资讯库</a><a href="#supply">供需跟踪</a><a href="#reports">会员报告</a></nav>
+    <div class="top-actions"><span class="edition"><i></i>测试版</span><button class="text-button" id="loginButton" type="button">登录</button><button class="primary-button compact subscribe-trigger" type="button">订阅会员</button></div>
+  </header>
+
+  <main id="top">
+    <section class="masthead" id="market"><div><p class="kicker">焦煤 / 每日研究桌面</p><h1>今天的焦煤，<em>先看供给。</em></h1><p class="lede">把口岸、矿山和焦化厂的变化，整理成一张能快速读懂的研究桌面。</p><div class="masthead-meta"><span>更新至 9月5日 16:40</span><span>非实时数据 · 研究测试版</span></div></div><div class="masthead-actions"><button class="secondary-button" id="openMethod" type="button">查看数据口径</button><button class="primary-button subscribe-trigger" type="button">解锁会员研究 <span>↗</span></button></div></section>
+
+    <section class="metric-strip" aria-label="焦煤市场概览"><article class="metric-card accent-green"><span>焦煤主力 JM2701</span><strong>1,666</strong><small>元/吨 · 9月4日收盘</small><b>+0.66%</b></article><article class="metric-card"><span>甘其毛都通关</span><strong>701.5</strong><small>车/日 · 9月初均值</small><b class="neutral">边际回升</b></article><article class="metric-card accent-red"><span>矿山产能利用率</span><strong>68.1%</strong><small>523家样本 · 周度</small><b>供应偏紧</b></article><article class="metric-card"><span>焦煤库存</span><strong>低位</strong><small>矿端连续去库</small><b class="neutral">关注复产</b></article></section>
+
+    <section class="workspace-grid"><div class="main-column">
+      <section class="panel briefs-panel" id="briefs"><div class="panel-heading"><div><p class="kicker">BRIEFING</p><h2>焦煤快讯</h2></div><label class="search-box"><span>⌕</span><input id="briefSearch" type="search" placeholder="搜索标题" aria-label="搜索资讯标题"></label></div><div class="filter-row" role="tablist" aria-label="资讯分类"><button class="filter-btn active" data-filter="all" type="button">全部</button><button class="filter-btn" data-filter="supply" type="button">供应</button><button class="filter-btn" data-filter="demand" type="button">需求</button><button class="filter-btn" data-filter="policy" type="button">政策与口岸</button></div><div class="brief-list" id="briefList">
+        <article class="brief-row" data-type="supply" data-title="山西复产增加但产量恢复仍慢"><span class="brief-time">16:40</span><div class="brief-copy"><div><span class="tag tag-supply">供应</span><h3>山西复产增加，但“复产不复量”仍是主线</h3></div><p>样本矿山产能利用率维持低位，优质低硫主焦资源报价坚挺。</p></div><button class="save-button" type="button" aria-label="收藏山西复产增加但产量恢复仍慢">☆</button></article>
+        <article class="brief-row" data-type="policy" data-title="甘其毛都通关边际回升"><span class="brief-time">14:20</span><div class="brief-copy"><div><span class="tag tag-policy">口岸</span><h3>甘其毛都通关边际回升，库存降至低位</h3></div><p>9月初日均通关约701.5车，供应修复预期仍需后续数据确认。</p></div><button class="save-button" type="button" aria-label="收藏甘其毛都通关边际回升">☆</button></article>
+        <article class="brief-row" data-type="demand" data-title="焦炭提涨向下游传导"><span class="brief-time">11:05</span><div class="brief-copy"><div><span class="tag tag-demand">需求</span><h3>焦炭第四轮提涨落地，下游刚需仍有韧性</h3></div><p>铁水仍在相对高位，但钢焦利润承压，旺季需求需要继续验证。</p></div><button class="save-button" type="button" aria-label="收藏焦炭提涨向下游传导">☆</button></article>
+        <article class="brief-row" data-type="policy" data-title="中蒙会晤前通关预期反复"><span class="brief-time">昨日</span><div class="brief-copy"><div><span class="tag tag-policy">政策</span><h3>中蒙会晤前，进口修复预期反复</h3></div><p>市场交易供应边际改善，近月强、远月弱的结构仍未改变。</p></div><button class="save-button" type="button" aria-label="收藏中蒙会晤前通关预期反复">☆</button></article>
+      </div><p class="empty-state" id="emptyState" hidden>没有匹配的资讯</p><div class="panel-footer"><span>来源：公开行业信息整理 · 仅作研究参考</span><button class="link-button subscribe-trigger" type="button">查看完整研报 →</button></div></section>
+
+      <section class="panel supply-panel" id="supply"><div class="panel-heading"><div><p class="kicker">SUPPLY / DEMAND</p><h2>供需温度</h2></div><span class="as-of">周度观察</span></div><div class="temperature-grid"><div class="temperature-item"><div><span>国内供应</span><strong>偏紧</strong></div><div class="meter"><i style="width:31%"></i></div><small>复产节奏慢，矿端库存继续下降</small></div><div class="temperature-item"><div><span>进口补充</span><strong>修复中</strong></div><div class="meter amber"><i style="width:48%"></i></div><small>通关回升但尚未恢复至前期高位</small></div><div class="temperature-item"><div><span>焦化需求</span><strong>有支撑</strong></div><div class="meter blue"><i style="width:62%"></i></div><small>刚需采购稳定，利润压缩限制上行</small></div></div><div class="insight-line"><span>研究判断</span><strong>短期偏强，高位震荡；关键看供应增量是否兑现。</strong></div></section>
+    </div><aside class="side-column">
+      <section class="panel chart-panel"><div class="panel-heading"><div><p class="kicker">HISTORICAL SNAPSHOT</p><h2>历史盘面示意</h2></div><span class="as-of">非实时</span></div><div class="chart-image-wrap"><img src="assets/market-chart-2.jpeg" alt="焦煤历史盘面示意图"><span>示意素材</span></div><div class="chart-caption"><strong>JM2609</strong><span>供给扰动带来的高波动</span></div></section>
+      <section class="panel watch-panel"><div class="panel-heading"><div><p class="kicker">WATCHLIST</p><h2>我的关注</h2></div><button class="link-button" id="clearWatch" type="button">清空</button></div><div class="watch-item"><span>JM2701</span><strong>1,666</strong><b>+0.66%</b></div><div class="watch-item muted-watch"><span>添加合约或关键词</span><button class="add-watch" type="button">＋</button></div></section>
+      <section class="member-teaser" id="reports"><div class="member-label">MEMBER NOTE</div><h2>把每日噪音，变成一页判断。</h2><p>会员版包含每日晨报、供需数据卡和关键事件提醒。</p><button class="primary-button subscribe-trigger" type="button">从 ¥29.9 / 月开始 <span>→</span></button></section>
+    </aside></section>
+  </main>
+  <footer class="footer"><span>焦煤观察 · 测试版</span><span>数据为示意，不构成投资建议</span></footer>
+
+  <div class="modal-backdrop" id="methodModal" hidden><div class="modal small-modal" role="dialog" aria-modal="true" aria-labelledby="methodTitle"><button class="close-button" data-close="methodModal" type="button" aria-label="关闭">×</button><p class="kicker">DATA NOTE</p><h2 id="methodTitle">本版数据口径</h2><p>当前页面使用公开信息整理和历史盘面示意素材，不接入实时行情接口，也不代表当前市场报价。</p><div class="method-list"><span>更新频率</span><strong>测试数据 · 手动更新</strong><span>市场数据</span><strong>非实时示意</strong><span>资讯用途</span><strong>研究参考</strong></div></div></div>
+  <div class="modal-backdrop" id="subscribeModal" hidden><div class="modal subscribe-modal" role="dialog" aria-modal="true" aria-labelledby="subscribeTitle"><button class="close-button" data-close="subscribeModal" type="button" aria-label="关闭">×</button><p class="kicker">MEMBERSHIP</p><h2 id="subscribeTitle">选择你的研究节奏</h2><p class="modal-lede">这是测试版结算层，不会真实扣款。</p><div class="plan-options"><button class="plan-option" data-plan="周报体验" data-price="9.9" type="button"><span>周报体验</span><strong>¥9.9</strong><small>7天会员内容</small></button><button class="plan-option selected" data-plan="月度研究" data-price="29.9" type="button"><span>月度研究</span><strong>¥29.9</strong><small>每日晨报与供需卡</small></button><button class="plan-option" data-plan="季度研究" data-price="79" type="button"><span>季度研究</span><strong>¥79</strong><small>更低月均价格</small></button></div><button class="primary-button modal-submit" id="confirmSubscribe" type="button">模拟开通月度研究</button><p class="modal-footnote">正式版将接入微信支付或支付宝，并按订阅状态开放内容。</p></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script src="script.js"></script>
+</body>
+</html>
