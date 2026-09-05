@@ -124,10 +124,6 @@ function renderAuthState(session) {
 
 loginButton.addEventListener('click', () => openModal('loginModal'));
 sendLoginLink.addEventListener('click', async () => {
-  if (!supabaseClient) {
-    loginStatus.textContent = '邮箱登录尚未配置 Supabase 项目';
-    return;
-  }
   const email = loginEmail.value.trim();
   if (!email || !loginEmail.checkValidity()) {
     loginStatus.textContent = '请输入有效的邮箱地址';
@@ -141,6 +137,10 @@ sendLoginLink.addEventListener('click', async () => {
   if (!isDomesticEmail) {
     loginStatus.textContent = '目前仅支持 QQ、163、126、139、189 等国内邮箱';
     loginEmail.focus();
+    return;
+  }
+  if (!supabaseClient) {
+    loginStatus.textContent = '邮箱登录尚未配置 Supabase 项目';
     return;
   }
   sendLoginLink.disabled = true;
