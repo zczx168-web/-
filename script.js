@@ -96,10 +96,10 @@ document.querySelector('#paymentDone').addEventListener('click', () => {
   paymentStep.hidden = true;
   confirmSubscribe.hidden = false;
   showToast(`已提交${selectedPlan.name}付款申请，等待人工核验`);
-  document.querySelector('.edition').innerHTML = '<i></i>待人工核验';
+  document.querySelector('.edition').innerHTML = '<i></i>订阅待核验';
 });
 document.querySelector('#loginButton').addEventListener('click', () => showToast('登录功能将在接入 Supabase Auth 后开放'));
 document.querySelector('#clearWatch').addEventListener('click', () => showToast('关注列表已清空（测试）'));
 document.querySelector('.add-watch').addEventListener('click', () => showToast('添加合约功能将在接入数据源后开放'));
 
-if (localStorage.getItem('coalPending')) document.querySelector('.edition').innerHTML = '<i></i>待人工核验';
+if (localStorage.getItem('coalPending')) document.querySelector('.edition').innerHTML = '<i></i>订阅待核验';
