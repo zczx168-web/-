@@ -74,17 +74,25 @@ alter table public.payment_requests enable row level security;
 alter table public.content enable row level security;
 alter table public.watchlists enable row level security;
 
+drop policy if exists "profiles are readable by owner" on public.profiles;
 create policy "profiles are readable by owner" on public.profiles for select using (auth.uid() = id);
+drop policy if exists "profiles are insertable by owner" on public.profiles;
 create policy "profiles are insertable by owner" on public.profiles for insert with check (auth.uid() = id);
+drop policy if exists "profiles are editable by owner" on public.profiles;
 create policy "profiles are editable by owner" on public.profiles for update using (auth.uid() = id) with check (auth.uid() = id);
 
+drop policy if exists "plans are public" on public.plans;
 create policy "plans are public" on public.plans for select using (true);
 
+drop policy if exists "subscriptions are readable by owner" on public.subscriptions;
 create policy "subscriptions are readable by owner" on public.subscriptions for select using (auth.uid() = user_id);
 
+drop policy if exists "payment requests are readable by owner" on public.payment_requests;
 create policy "payment requests are readable by owner" on public.payment_requests for select using (auth.uid() = user_id);
+drop policy if exists "payment requests are insertable by owner" on public.payment_requests;
 create policy "payment requests are insertable by owner" on public.payment_requests for insert with check (auth.uid() = user_id);
 
+drop policy if exists "free or active content is readable" on public.content;
 create policy "free or active content is readable" on public.content for select using (
   visibility = 'free'
   or exists (
@@ -95,9 +103,13 @@ create policy "free or active content is readable" on public.content for select 
   )
 );
 
+drop policy if exists "watchlists are readable by owner" on public.watchlists;
 create policy "watchlists are readable by owner" on public.watchlists for select using (auth.uid() = user_id);
+drop policy if exists "watchlists are insertable by owner" on public.watchlists;
 create policy "watchlists are insertable by owner" on public.watchlists for insert with check (auth.uid() = user_id);
+drop policy if exists "watchlists are editable by owner" on public.watchlists;
 create policy "watchlists are editable by owner" on public.watchlists for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+drop policy if exists "watchlists are removable by owner" on public.watchlists;
 create policy "watchlists are removable by owner" on public.watchlists for delete using (auth.uid() = user_id);
 
 create or replace function public.handle_new_user()
