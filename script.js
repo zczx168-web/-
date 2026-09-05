@@ -41,6 +41,10 @@ document.querySelectorAll('.save-button').forEach((button) => {
 
 const modalIds = ['methodModal', 'subscribeModal'];
 function openModal(id) {
+  if (id === 'subscribeModal' && paymentStep) {
+    paymentStep.hidden = true;
+    confirmSubscribe.hidden = false;
+  }
   document.querySelector(`#${id}`).hidden = false;
   document.body.classList.add('modal-open');
 }
@@ -57,19 +61,28 @@ document.addEventListener('keydown', (event) => {
 });
 
 let selectedPlan = { name: '月度研究', price: '29.9' };
+const paymentStep = document.querySelector('#paymentStep');
+const confirmSubscribe = document.querySelector('#confirmSubscribe');
+const paymentAmount = document.querySelector('#paymentAmount');
 document.querySelectorAll('.plan-option').forEach((button) => {
   button.addEventListener('click', () => {
     document.querySelectorAll('.plan-option').forEach((item) => item.classList.remove('selected'));
     button.classList.add('selected');
     selectedPlan = { name: button.dataset.plan, price: button.dataset.price };
-    document.querySelector('#confirmSubscribe').textContent = `模拟开通${selectedPlan.name}`;
+    paymentAmount.textContent = `¥${selectedPlan.price}`;
   });
 });
-document.querySelector('#confirmSubscribe').addEventListener('click', () => {
+confirmSubscribe.addEventListener('click', () => {
+  paymentStep.hidden = false;
+  confirmSubscribe.hidden = true;
+});
+document.querySelector('#paymentDone').addEventListener('click', () => {
   localStorage.setItem('coalMember', JSON.stringify(selectedPlan));
   closeModal('subscribeModal');
-  showToast(`测试会员已开通：${selectedPlan.name} ¥${selectedPlan.price}`);
-  document.querySelector('.edition').innerHTML = '<i></i>会员测试中';
+  paymentStep.hidden = true;
+  confirmSubscribe.hidden = false;
+  showToast(`已提交${selectedPlan.name}付款申请，等待人工核验`);
+  document.querySelector('.edition').innerHTML = '<i></i>待人工核验';
 });
 document.querySelector('#loginButton').addEventListener('click', () => showToast('登录功能将在接入 Supabase Auth 后开放'));
 document.querySelector('#clearWatch').addEventListener('click', () => showToast('关注列表已清空（测试）'));
