@@ -189,8 +189,8 @@ verifyLoginCode.addEventListener('click', async () => {
     loginStatus.textContent = '验证码无效或已过期，请重新获取';
     return;
   }
-  renderAuthState(data.session);
   closeModal('loginModal');
+  renderAuthState(data.session);
   showToast('登录成功');
 });
 signOutButton.addEventListener('click', async () => {
