@@ -1,5 +1,5 @@
-// Fill these public browser values after creating your Supabase project.
+// Public browser configuration for the Supabase client.
 window.SUPABASE_CONFIG = {
-  url: '',
-  publishableKey: '',
+  url: 'https://zqieydimlwxedwnlpkok.supabase.co',
+  publishableKey: 'sb_publishable_wYPaP_9-vX5qqHLLEHs8iQ_XlG9mciD',
 };
