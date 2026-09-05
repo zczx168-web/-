@@ -106,6 +106,10 @@ const loginCode = document.querySelector('#loginCode');
 const verifyLoginCode = document.querySelector('#verifyLoginCode');
 const signOutButton = document.querySelector('#signOutButton');
 const loginStatus = document.querySelector('#loginStatus');
+loginCode.addEventListener('input', () => {
+  const digitsOnly = loginCode.value.replace(/\D/g, '').slice(0, 6);
+  if (loginCode.value !== digitsOnly) loginCode.value = digitsOnly;
+});
 const domesticEmailDomains = [
   'qq.com', 'foxmail.com', '163.com', '126.com', 'yeah.net', '139.com',
   '189.cn', 'wo.cn', 'aliyun.com', 'sina.com', 'sina.cn', 'sohu.com',
