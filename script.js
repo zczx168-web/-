@@ -58,10 +58,29 @@ function renderAutoBrief(data) {
     tag.className = `tag tag-${category}`;
     tag.textContent = categoryLabels[category] || '资讯';
     const title = document.createElement('h3');
-    title.textContent = item.title;
+    if (item.url) {
+      const titleLink = document.createElement('a');
+      titleLink.className = 'brief-title-link';
+      titleLink.href = item.url;
+      titleLink.target = '_blank';
+      titleLink.rel = 'noopener noreferrer';
+      titleLink.textContent = item.title;
+      title.append(titleLink);
+    } else {
+      title.textContent = item.title;
+    }
     heading.append(tag, title);
     const summary = document.createElement('p');
-    summary.textContent = item.summary || `来源：${item.source || '公开信息'}`;
+    summary.append(document.createTextNode(item.summary || `来源：${item.source || '公开信息'}`));
+    if (item.url) {
+      const sourceLink = document.createElement('a');
+      sourceLink.className = 'brief-source-link';
+      sourceLink.href = item.url;
+      sourceLink.target = '_blank';
+      sourceLink.rel = 'noopener noreferrer';
+      sourceLink.textContent = `查看${item.source || '来源'}`;
+      summary.append(document.createTextNode(' '), sourceLink);
+    }
     copy.append(heading, summary);
     const save = document.createElement('button');
     save.className = 'save-button';
