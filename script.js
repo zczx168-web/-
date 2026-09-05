@@ -107,7 +107,7 @@ const verifyLoginCode = document.querySelector('#verifyLoginCode');
 const signOutButton = document.querySelector('#signOutButton');
 const loginStatus = document.querySelector('#loginStatus');
 loginCode.addEventListener('input', () => {
-  const digitsOnly = loginCode.value.replace(/\D/g, '').slice(0, 6);
+  const digitsOnly = loginCode.value.replace(/\D/g, '').slice(0, 8);
   if (loginCode.value !== digitsOnly) loginCode.value = digitsOnly;
 });
 const domesticEmailDomains = [
@@ -172,8 +172,8 @@ sendLoginLink.addEventListener('click', async () => {
 verifyLoginCode.addEventListener('click', async () => {
   const email = loginEmail.value.trim();
   const token = loginCode.value.trim();
-  if (!email || !loginEmail.checkValidity() || !/^\d{6}$/.test(token)) {
-    loginStatus.textContent = '请输入有效邮箱和 6 位验证码';
+  if (!email || !loginEmail.checkValidity() || !/^\d{8}$/.test(token)) {
+    loginStatus.textContent = '请输入有效邮箱和 8 位验证码';
     loginCode.focus();
     return;
   }
