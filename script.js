@@ -101,6 +101,9 @@ document.querySelector('#paymentDone').addEventListener('click', () => {
 const loginButton = document.querySelector('#loginButton');
 const loginEmail = document.querySelector('#loginEmail');
 const sendLoginLink = document.querySelector('#sendLoginLink');
+const loginCodeField = document.querySelector('#loginCodeField');
+const loginCode = document.querySelector('#loginCode');
+const verifyLoginCode = document.querySelector('#verifyLoginCode');
 const signOutButton = document.querySelector('#signOutButton');
 const loginStatus = document.querySelector('#loginStatus');
 const domesticEmailDomains = [
@@ -120,6 +123,8 @@ function renderAuthState(session) {
   signOutButton.hidden = !email;
   sendLoginLink.hidden = Boolean(email);
   loginEmail.hidden = Boolean(email);
+  loginCodeField.hidden = Boolean(email);
+  verifyLoginCode.hidden = Boolean(email);
   loginStatus.textContent = email ? `当前账号：${email}` : '';
 }
 
@@ -145,13 +150,38 @@ sendLoginLink.addEventListener('click', async () => {
     return;
   }
   sendLoginLink.disabled = true;
-  loginStatus.textContent = '登录链接发送中...';
+  loginStatus.textContent = '验证码发送中...';
   const { error } = await supabaseClient.auth.signInWithOtp({
     email,
     options: { emailRedirectTo: authRedirectUrl },
   });
   sendLoginLink.disabled = false;
-  loginStatus.textContent = error ? `发送失败：${error.message}` : '登录链接已发送，请检查邮箱';
+  if (error) {
+    loginStatus.textContent = `发送失败：${error.message}`;
+    return;
+  }
+  loginCodeField.hidden = false;
+  verifyLoginCode.hidden = false;
+  loginCode.focus();
+  loginStatus.textContent = '验证码已发送，请查收中文邮件';
+});
+verifyLoginCode.addEventListener('click', async () => {
+  const email = loginEmail.value.trim();
+  const token = loginCode.value.trim();
+  if (!email || !loginEmail.checkValidity() || !/^\d{6}$/.test(token)) {
+    loginStatus.textContent = '请输入有效邮箱和 6 位验证码';
+    loginCode.focus();
+    return;
+  }
+  if (!supabaseClient) {
+    loginStatus.textContent = '邮箱登录尚未配置 Supabase 项目';
+    return;
+  }
+  verifyLoginCode.disabled = true;
+  loginStatus.textContent = '正在验证...';
+  const { error } = await supabaseClient.auth.verifyOtp({ email, token, type: 'email' });
+  verifyLoginCode.disabled = false;
+  loginStatus.textContent = error ? '验证码无效或已过期，请重新获取' : '登录成功';
 });
 signOutButton.addEventListener('click', async () => {
   if (supabaseClient) await supabaseClient.auth.signOut();

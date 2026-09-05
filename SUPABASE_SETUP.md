@@ -27,8 +27,10 @@ In `Authentication > Email Templates > Magic Link`, set the subject to `焦煤�
 
 ```html
 <h2>登录焦煤观察</h2>
-<p>您好，点击下面按钮登录焦煤观察：</p>
-<p><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:10px 18px;background:#157c6c;color:#fffdf8;text-decoration:none;border-radius:4px;">立即登录</a></p>
+<p>您好，您的邮箱验证码是：</p>
+<p style="font-size:28px;letter-spacing:6px;font-weight:700;">{{ .Token }}</p>
+<p>请回到焦煤观察页面输入这 6 位验证码完成登录。</p>
+<p><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:10px 18px;background:#157c6c;color:#fffdf8;text-decoration:none;border-radius:4px;">也可以直接登录</a></p>
 <p>如果不是您本人操作，请忽略本邮件。</p>
 <p>此链接仅限本人使用，打开后即可完成登录。</p>
 ```
