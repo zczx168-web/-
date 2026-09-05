@@ -64,12 +64,26 @@ let selectedPlan = { name: '月度研究', price: '29.9' };
 const paymentStep = document.querySelector('#paymentStep');
 const confirmSubscribe = document.querySelector('#confirmSubscribe');
 const paymentAmount = document.querySelector('#paymentAmount');
+const paymentQr = document.querySelector('#paymentQr');
+const paymentMethodLabel = document.querySelector('#paymentMethodLabel');
+const paymentQrByPrice = {
+  '9.9': { src: 'assets/payment-9-9.jpg', label: '周报体验' },
+  '29.9': { src: 'assets/payment-29-9.jpg', label: '月度研究' },
+  '79': { src: 'assets/payment-79.jpg', label: '季度研究' },
+};
+function updatePaymentDetails() {
+  const details = paymentQrByPrice[selectedPlan.price];
+  paymentAmount.textContent = `¥${selectedPlan.price}`;
+  paymentMethodLabel.textContent = details.label;
+  paymentQr.src = details.src;
+  paymentQr.alt = `微信支付二维码，金额${selectedPlan.price}元`;
+}
 document.querySelectorAll('.plan-option').forEach((button) => {
   button.addEventListener('click', () => {
     document.querySelectorAll('.plan-option').forEach((item) => item.classList.remove('selected'));
     button.classList.add('selected');
     selectedPlan = { name: button.dataset.plan, price: button.dataset.price };
-    paymentAmount.textContent = `¥${selectedPlan.price}`;
+    updatePaymentDetails();
   });
 });
 confirmSubscribe.addEventListener('click', () => {
