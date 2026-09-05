@@ -39,7 +39,7 @@ document.querySelectorAll('.save-button').forEach((button) => {
   });
 });
 
-const modalIds = ['methodModal', 'subscribeModal'];
+const modalIds = ['methodModal', 'subscribeModal', 'loginModal'];
 function openModal(id) {
   if (id === 'subscribeModal' && paymentStep) {
     paymentStep.hidden = true;
@@ -98,8 +98,58 @@ document.querySelector('#paymentDone').addEventListener('click', () => {
   showToast(`已提交${selectedPlan.name}付款申请，等待人工核验`);
   document.querySelector('.edition').innerHTML = '<i></i>订阅待核验';
 });
-document.querySelector('#loginButton').addEventListener('click', () => showToast('登录功能将在接入 Supabase Auth 后开放'));
-document.querySelector('#clearWatch').addEventListener('click', () => showToast('关注列表已清空（测试）'));
+const loginButton = document.querySelector('#loginButton');
+const loginEmail = document.querySelector('#loginEmail');
+const sendLoginLink = document.querySelector('#sendLoginLink');
+const signOutButton = document.querySelector('#signOutButton');
+const loginStatus = document.querySelector('#loginStatus');
+const supabaseConfig = window.SUPABASE_CONFIG || {};
+const supabaseClient = window.supabase && supabaseConfig.url && supabaseConfig.publishableKey
+  ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.publishableKey)
+  : null;
+
+function renderAuthState(session) {
+  const email = session?.user?.email;
+  loginButton.textContent = email ? '已登录' : '登录';
+  signOutButton.hidden = !email;
+  sendLoginLink.hidden = Boolean(email);
+  loginEmail.hidden = Boolean(email);
+  loginStatus.textContent = email ? `当前账号：${email}` : '';
+}
+
+loginButton.addEventListener('click', () => openModal('loginModal'));
+sendLoginLink.addEventListener('click', async () => {
+  if (!supabaseClient) {
+    loginStatus.textContent = '邮箱登录尚未配置 Supabase 项目';
+    return;
+  }
+  const email = loginEmail.value.trim();
+  if (!email || !loginEmail.checkValidity()) {
+    loginStatus.textContent = '请输入有效的邮箱地址';
+    loginEmail.focus();
+    return;
+  }
+  sendLoginLink.disabled = true;
+  loginStatus.textContent = '登录链接发送中...';
+  const { error } = await supabaseClient.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: window.location.origin + window.location.pathname },
+  });
+  sendLoginLink.disabled = false;
+  loginStatus.textContent = error ? `发送失败：${error.message}` : '登录链接已发送，请检查邮箱';
+});
+signOutButton.addEventListener('click', async () => {
+  if (supabaseClient) await supabaseClient.auth.signOut();
+  renderAuthState(null);
+  showToast('已退出登录');
+});
+if (supabaseClient) {
+  supabaseClient.auth.getSession().then(({ data }) => renderAuthState(data.session));
+  supabaseClient.auth.onAuthStateChange((_event, session) => renderAuthState(session));
+} else {
+  renderAuthState(null);
+}
+document.querySelector('#clearWatch').addEventListener('click', () => showToast('关注列表已清空'));
 document.querySelector('.add-watch').addEventListener('click', () => showToast('添加合约功能将在接入数据源后开放'));
 
 if (localStorage.getItem('coalPending')) document.querySelector('.edition').innerHTML = '<i></i>订阅待核验';
