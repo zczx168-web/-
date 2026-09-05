@@ -17,3 +17,5 @@
    ```
 
 The publishable key is intended for browser use. Never put a database password or service-role key in this file.
+
+Run `supabase/schema.sql` in the Supabase SQL Editor after the project is created. It creates profiles, plans, subscriptions, payment requests, member content, watchlists, and Row Level Security policies.
