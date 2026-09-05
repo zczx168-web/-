@@ -108,6 +108,7 @@ const domesticEmailDomains = [
   '189.cn', 'wo.cn', 'aliyun.com', 'sina.com', 'sina.cn', 'sohu.com',
   '21cn.com', '263.net', 'mail.com.cn',
 ];
+const authRedirectUrl = 'https://zczx168-web.github.io/-/';
 const supabaseConfig = window.SUPABASE_CONFIG || {};
 const supabaseClient = window.supabase && supabaseConfig.url && supabaseConfig.publishableKey
   ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.publishableKey)
@@ -147,7 +148,7 @@ sendLoginLink.addEventListener('click', async () => {
   loginStatus.textContent = '登录链接发送中...';
   const { error } = await supabaseClient.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: window.location.origin + window.location.pathname },
+    options: { emailRedirectTo: authRedirectUrl },
   });
   sendLoginLink.disabled = false;
   loginStatus.textContent = error ? `发送失败：${error.message}` : '登录链接已发送，请检查邮箱';
