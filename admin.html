@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="焦煤观察客服会员开通后台">
+  <title>客服后台｜焦煤观察</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+  <header class="admin-topbar">
+    <a class="brand" href="./" aria-label="返回焦煤观察首页"><span class="brand-mark">JM</span><span><strong>焦煤观察</strong><small>客服后台</small></span></a>
+    <div class="admin-top-actions"><span class="admin-account" id="adminAccount" hidden></span><button class="secondary-button compact" id="adminSignOut" type="button" hidden>退出登录</button></div>
+  </header>
+
+  <main class="admin-shell">
+    <section class="admin-auth panel" id="adminAuthView">
+      <p class="kicker">客服登录</p>
+      <h1>会员开通后台</h1>
+      <p class="admin-lede">使用已加入客服白名单的邮箱登录，处理会员体验和订阅申请。</p>
+      <label class="admin-field"><span>客服邮箱</span><input id="adminEmail" type="email" autocomplete="email" placeholder="例如 service@qq.com"></label>
+      <p class="admin-help">仅支持已在 Supabase 中设置为客服的账号。</p>
+      <button class="primary-button admin-full-button" id="adminSendCode" type="button">发送验证码</button>
+      <label class="admin-field" id="adminCodeField" hidden><span>邮箱验证码（8位）</span><input id="adminCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="输入8位验证码"></label>
+      <button class="secondary-button admin-full-button" id="adminVerifyCode" type="button" hidden>验证并进入后台</button>
+      <p class="admin-status" id="adminAuthStatus" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="admin-app" id="adminAppView" hidden>
+      <div class="admin-page-heading">
+        <div><p class="kicker">运营工作台</p><h1>会员申请</h1><p class="admin-lede">审核免费体验和人工收款申请，开通后用户刷新页面即可获得权限。</p></div>
+        <button class="secondary-button" id="adminRefresh" type="button">刷新列表</button>
+      </div>
+      <div class="admin-summary" aria-label="申请统计"><div><span>待处理</span><strong id="pendingCount">0</strong></div><div><span>当前列表</span><strong id="visibleCount">0</strong></div><div><span>登录账号</span><strong id="staffRole">客服</strong></div></div>
+      <section class="admin-panel panel">
+        <div class="admin-toolbar"><div class="admin-filters" role="tablist" aria-label="申请状态"><button class="admin-filter active" data-status="pending" type="button">待处理</button><button class="admin-filter" data-status="approved" type="button">已通过</button><button class="admin-filter" data-status="rejected" type="button">已拒绝</button><button class="admin-filter" data-status="all" type="button">全部</button></div><label class="admin-search"><span>⌕</span><input id="adminSearch" type="search" placeholder="搜索邮箱或申请编号" aria-label="搜索邮箱或申请编号"></label></div>
+        <p class="admin-list-status" id="adminListStatus" role="status" aria-live="polite"></p>
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>用户</th><th>套餐</th><th>金额</th><th>申请时间</th><th>状态</th><th>操作</th></tr></thead><tbody id="adminRequestRows"></tbody></table></div>
+        <div class="admin-empty" id="adminEmpty" hidden><strong>当前没有申请</strong><span>新的申请会自动出现在这里。</span></div>
+      </section>
+      <p class="admin-security-note">后台操作由 Supabase 安全函数执行，客服账号不会接触数据库密钥。</p>
+    </section>
+  </main>
+
+  <div class="toast" id="adminToast" role="status" aria-live="polite" hidden></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="admin.js?v=member-admin-20260906"></script>
+</body>
+</html>

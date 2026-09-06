@@ -86,6 +86,25 @@ where not exists (
 
 After approval, the user refreshes the website. Active subscriptions can read `content` rows with `visibility = 'member'`; expired or unapproved accounts cannot. Add member articles from the `content` table, for example with `category = 'briefing'` and `visibility = 'member'`.
 
+## 客服会员开通后台
+
+网站新增了客服后台：
+
+```text
+https://zczx168-web.github.io/-/admin.html
+```
+
+首次配置步骤：
+
+1. 在 Supabase SQL Editor 中执行 `supabase/admin-tool.sql`。
+2. 确保客服邮箱已经注册过网站账号。
+3. 将脚本最后的示例邮箱替换为客服邮箱，执行 `insert into public.staff_accounts ...`，把该账号加入客服白名单。
+4. 客服打开 `admin.html`，使用白名单邮箱接收 8 位验证码登录。
+
+后台只通过安全数据库函数处理申请。点击“同意并开通”会在一次数据库事务中审核申请并创建 active 订阅；“拒绝”会更新申请状态。客服前端不会保存或读取 service-role key。
+
+如果后台提示“尚未加入客服白名单”，请检查 `public.staff_accounts` 是否已经添加了当前登录账号的 Auth user ID。不要把 service-role key、数据库密码或邮箱授权码放进 `admin.html`、`admin.js` 或 GitHub。
+
 For the daily morning report, publish one row per day with `category = 'briefing'`. Store the structured sections as JSON in `body`; the website renders these six sections automatically:
 
 ```json
