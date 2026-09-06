@@ -164,7 +164,7 @@ const paymentQr = document.querySelector('#paymentQr');
 const paymentMethodLabel = document.querySelector('#paymentMethodLabel');
 const paymentDone = document.querySelector('#paymentDone');
 const paymentQrByPrice = {
-  '9.9': { src: 'assets/payment-9-9.jpg', label: '周报体验' },
+  '9.9': { src: 'assets/payment-9-9.jpg', label: '7天体验' },
   '29.9': { src: 'assets/payment-29-9.jpg', label: '月度研究' },
   '79': { src: 'assets/payment-79.jpg', label: '季度研究' },
 };
@@ -218,7 +218,7 @@ const edition = document.querySelector('.edition');
 const membershipBadge = document.querySelector('#membershipBadge');
 const memberContentState = document.querySelector('#memberContentState');
 const memberContentList = document.querySelector('#memberContentList');
-const planNames = { weekly: '周报体验', monthly: '月度研究', quarterly: '季度研究' };
+const planNames = { weekly: '7天体验', monthly: '月度研究', quarterly: '季度研究' };
 let currentSession = null;
 let currentSubscription = null;
 let currentPaymentRequest = null;
