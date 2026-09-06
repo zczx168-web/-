@@ -17,13 +17,13 @@ create table if not exists public.plans (
 );
 
 insert into public.plans (code, name, price, duration_days, benefits) values
-  ('weekly', '7天体验', 9.90, 7, array['每日晨报', '周报', '供需数据卡']),
+  ('weekly', '7天免费体验', 0.00, 7, array['每日晨报', '周报', '供需数据卡']),
   ('monthly', '月度研究', 29.90, 30, array['每日晨报', '事件提醒', '关注清单', '报告库']),
   ('quarterly', '季度研究', 79.00, 90, array['每日晨报', '季度专题', '报告库', '关注清单'])
 on conflict (code) do nothing;
 
 -- 已有项目同步体验套餐名称，不改变价格和有效期。
-update public.plans set name = '7天体验' where code = 'weekly';
+update public.plans set name = '7天免费体验', price = 0.00 where code = 'weekly';
 
 create table if not exists public.subscriptions (
   id uuid primary key default gen_random_uuid(),

@@ -45,6 +45,8 @@ Run `supabase/schema.sql` in the Supabase SQL Editor after the project is create
 
 The website writes a row to `payment_requests` after a signed-in user scans a QR code and clicks the confirmation button. Review pending requests in the Supabase Table Editor, then run the following SQL in the SQL Editor with the request's `id`, `user_id`, and `plan_code`:
 
+The `weekly` plan is the `7天免费体验` plan at `0.00` yuan. It uses the same request table and manual approval flow, but does not display a payment QR code. Approve it with the same SQL to grant seven days of access.
+
 ```sql
 update public.payment_requests
 set status = 'approved'

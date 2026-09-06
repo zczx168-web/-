@@ -182,17 +182,43 @@ const paymentAmount = document.querySelector('#paymentAmount');
 const paymentQr = document.querySelector('#paymentQr');
 const paymentMethodLabel = document.querySelector('#paymentMethodLabel');
 const paymentDone = document.querySelector('#paymentDone');
+const paymentMethods = paymentStep.querySelector('.payment-methods');
+const paymentQrBox = paymentStep.querySelector('.qr-placeholder');
+const paymentInstructions = paymentStep.querySelector('.payment-instructions');
+const subscribeFootnote = document.querySelector('#subscribeFootnote');
 const paymentQrByPrice = {
-  '9.9': { src: 'assets/payment-9-9.jpg', label: '7天体验' },
   '29.9': { src: 'assets/payment-29-9.jpg', label: '月度研究' },
   '79': { src: 'assets/payment-79.jpg', label: '季度研究' },
 };
 function updatePaymentDetails() {
+  const isFreeTrial = Number(selectedPlan.price) === 0;
   const details = paymentQrByPrice[selectedPlan.price];
   paymentAmount.textContent = `¥${selectedPlan.price}`;
+  confirmSubscribe.textContent = isFreeTrial ? '查看免费体验' : '查看付款方式';
+  paymentDone.textContent = isFreeTrial ? '申请7天免费体验' : '我已完成付款，提交核验';
+  paymentMethods.hidden = isFreeTrial;
+  paymentQrBox.hidden = isFreeTrial;
+  if (isFreeTrial) {
+    paymentMethodLabel.textContent = '免费体验';
+    paymentInstructions.replaceChildren();
+    ['本套餐无需付款', '点击下方按钮提交体验申请', '人工开通后可使用7天会员内容'].forEach((text) => {
+      const item = document.createElement('li');
+      item.textContent = text;
+      paymentInstructions.append(item);
+    });
+    subscribeFootnote.textContent = '免费体验申请由客服人工开通，提交后请留意会员状态变化。';
+    return;
+  }
   paymentMethodLabel.textContent = details.label;
   paymentQr.src = details.src;
   paymentQr.alt = `微信支付二维码，金额${selectedPlan.price}元`;
+  paymentInstructions.replaceChildren();
+  ['扫描对应套餐的微信支付收款码', '付款金额需与上方套餐一致', '付款后通过运营指定渠道发送付款时间和昵称'].forEach((text) => {
+    const item = document.createElement('li');
+    item.textContent = text;
+    paymentInstructions.append(item);
+  });
+  subscribeFootnote.textContent = '月度和季度套餐采用人工核验；后续可接入微信支付或支付宝商户接口。';
 }
 document.querySelectorAll('.plan-option').forEach((button) => {
   button.addEventListener('click', () => {
@@ -237,7 +263,7 @@ const edition = document.querySelector('.edition');
 const membershipBadge = document.querySelector('#membershipBadge');
 const memberContentState = document.querySelector('#memberContentState');
 const memberContentList = document.querySelector('#memberContentList');
-const planNames = { weekly: '7天体验', monthly: '月度研究', quarterly: '季度研究' };
+const planNames = { weekly: '7天免费体验', monthly: '月度研究', quarterly: '季度研究' };
 let currentSession = null;
 let currentSubscription = null;
 let currentPaymentRequest = null;
@@ -614,16 +640,18 @@ async function refreshAccount(session) {
 }
 
 async function submitPaymentRequest() {
+  const isFreeTrial = Number(selectedPlan.price) === 0;
+  const requestLabel = isFreeTrial ? '免费体验申请' : '付款申请';
   if (isLocalMemberPreview) {
     localStorage.setItem('coalPending', JSON.stringify(selectedPlan));
     closeModal('subscribeModal');
-    showToast(`预览：已记录${selectedPlan.name}付款申请`);
+    showToast(`预览：已记录${selectedPlan.name}${requestLabel}`);
     return;
   }
   if (!supabaseClient) {
     localStorage.setItem('coalPending', JSON.stringify(selectedPlan));
     closeModal('subscribeModal');
-    showToast(`已记录${selectedPlan.name}付款申请（本地演示）`);
+    showToast(`已记录${selectedPlan.name}${requestLabel}（本地演示）`);
     return;
   }
   const { data: sessionData } = await supabaseClient.auth.getSession();
@@ -640,7 +668,7 @@ async function submitPaymentRequest() {
     plan_code: selectedPlan.code,
     amount: Number(selectedPlan.price),
     payment_time: new Date().toISOString(),
-    note: '用户通过网页提交付款核验',
+    note: isFreeTrial ? '用户通过网页申请7天免费体验' : '用户通过网页提交付款核验',
   });
   paymentDone.disabled = false;
   if (error) {
@@ -653,7 +681,7 @@ async function submitPaymentRequest() {
   closeModal('subscribeModal');
   paymentStep.hidden = true;
   confirmSubscribe.hidden = false;
-  showToast(`已提交${selectedPlan.name}付款申请，等待人工核验`);
+  showToast(`已提交${selectedPlan.name}${requestLabel}，等待人工开通`);
 }
 
 function renderAuthState(session) {
