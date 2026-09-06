@@ -90,6 +90,8 @@ values (
 
 Other member content categories supported by the website are `data-card`, `event`, `report`, and `qa`. They appear under the member content tabs and are filtered without exposing them to unsigned or inactive accounts.
 
+For a quick end-to-end test, run `supabase/member-content-seed.sql` after the schema. It inserts one substantive sample item for each member category, including metrics, a dated event timeline, report sections, and a question with evidence-based answer. Replace these seed rows with the daily research content before the public launch.
+
 ## Free public-source collector
 
 The GitHub Actions workflow at `.github/workflows/collect-daily.yml` runs at several Beijing-time windows and executes `scripts/collect_market_data.py`. It reads public pages from DCE, CCTD, the National Bureau of Statistics, Customs, and NDRC, then writes a deduplicated digest to `data/daily-brief.json`. The website loads this file into the public `焦煤快讯` panel. Run the workflow manually from the GitHub Actions tab to test it; scheduled runs may be delayed by GitHub and a source can be skipped when its public page is unavailable. The collector records such warnings in the JSON instead of fabricating data.
