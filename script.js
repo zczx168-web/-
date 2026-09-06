@@ -302,8 +302,190 @@ function renderMorningBrief(item) {
   return article;
 }
 
+function parseMemberBody(item) {
+  if (!item.body) return {};
+  if (typeof item.body === 'object') return item.body;
+  try {
+    const parsed = JSON.parse(item.body);
+    return parsed && typeof parsed === 'object' ? parsed : { text: String(item.body) };
+  } catch {
+    return { text: String(item.body) };
+  }
+}
+
+function appendMemberMeta(article, item) {
+  const meta = document.createElement('span');
+  meta.className = 'member-item-meta';
+  meta.textContent = `${item.category || '研究'} · ${formatDate(item.published_at)}`;
+  article.append(meta);
+}
+
+function appendMemberHeading(article, item) {
+  const title = document.createElement('h3');
+  title.textContent = item.title;
+  article.append(title);
+  if (item.summary) {
+    const summary = document.createElement('p');
+    summary.className = 'member-item-summary';
+    summary.textContent = item.summary;
+    article.append(summary);
+  }
+}
+
+function appendMemberLabeledText(article, className, label, value) {
+  if (!value) return;
+  const block = document.createElement('div');
+  block.className = className;
+  const heading = document.createElement('b');
+  heading.textContent = label;
+  block.append(heading, document.createTextNode(String(value)));
+  article.append(block);
+}
+
+function renderDataCard(item) {
+  const body = parseMemberBody(item);
+  const article = document.createElement('article');
+  article.className = 'member-content-item member-content-rich member-content-data-card';
+  appendMemberMeta(article, item);
+  appendMemberHeading(article, item);
+  const asOf = document.createElement('div');
+  asOf.className = 'member-rich-note';
+  asOf.textContent = body.asOf ? `数据截至：${body.asOf}` : '数据口径：公开周度资料整理';
+  article.append(asOf);
+  const metrics = document.createElement('div');
+  metrics.className = 'data-card-metrics';
+  (body.metrics || []).forEach((metric) => {
+    const card = document.createElement('div');
+    card.className = 'data-card-metric';
+    const label = document.createElement('span');
+    label.textContent = metric.label || '指标';
+    const value = document.createElement('strong');
+    value.textContent = metric.value || '-';
+    const change = document.createElement('small');
+    change.textContent = metric.change || '';
+    if (metric.tone) change.dataset.tone = metric.tone;
+    const note = document.createElement('p');
+    note.textContent = metric.note || '';
+    card.append(label, value, change, note);
+    metrics.append(card);
+  });
+  if (metrics.children.length) article.append(metrics);
+  appendMemberLabeledText(article, 'member-rich-takeaway', '研究解读', body.takeaway);
+  return article;
+}
+
+function renderEventCard(item) {
+  const body = parseMemberBody(item);
+  const article = document.createElement('article');
+  article.className = 'member-content-item member-content-rich member-content-event';
+  appendMemberMeta(article, item);
+  appendMemberHeading(article, item);
+  if (body.priority) {
+    const priority = document.createElement('div');
+    priority.className = `event-priority event-priority-${body.priorityTone || 'medium'}`;
+    priority.textContent = `关注级别：${body.priority}`;
+    article.append(priority);
+  }
+  const timeline = document.createElement('div');
+  timeline.className = 'event-timeline';
+  (body.timeline || []).forEach((event) => {
+    const row = document.createElement('div');
+    row.className = 'event-timeline-row';
+    const time = document.createElement('time');
+    time.textContent = event.time || '';
+    const copy = document.createElement('div');
+    const heading = document.createElement('strong');
+    heading.textContent = event.title || '';
+    const detail = document.createElement('p');
+    detail.textContent = event.detail || '';
+    copy.append(heading, detail);
+    row.append(time, copy);
+    timeline.append(row);
+  });
+  if (timeline.children.length) article.append(timeline);
+  appendMemberLabeledText(article, 'member-rich-takeaway', '下一观察点', body.next);
+  return article;
+}
+
+function renderReportCard(item) {
+  const body = parseMemberBody(item);
+  const article = document.createElement('article');
+  article.className = 'member-content-item member-content-rich member-content-report';
+  appendMemberMeta(article, item);
+  appendMemberHeading(article, item);
+  if (body.abstract) {
+    const abstract = document.createElement('p');
+    abstract.className = 'report-abstract';
+    abstract.textContent = body.abstract;
+    article.append(abstract);
+  }
+  const sections = document.createElement('div');
+  sections.className = 'report-sections';
+  (body.sections || []).forEach((section) => {
+    const block = document.createElement('section');
+    const heading = document.createElement('strong');
+    heading.textContent = section.heading || '要点';
+    const text = document.createElement('p');
+    text.textContent = section.body || '';
+    block.append(heading, text);
+    sections.append(block);
+  });
+  if (sections.children.length) article.append(sections);
+  if (Array.isArray(body.highlights) && body.highlights.length) {
+    const highlights = document.createElement('ul');
+    highlights.className = 'report-highlights';
+    body.highlights.forEach((highlight) => {
+      const li = document.createElement('li');
+      li.textContent = highlight;
+      highlights.append(li);
+    });
+    article.append(highlights);
+  }
+  return article;
+}
+
+function renderQaCard(item) {
+  const body = parseMemberBody(item);
+  const article = document.createElement('article');
+  article.className = 'member-content-item member-content-rich member-content-qa';
+  appendMemberMeta(article, item);
+  appendMemberHeading(article, item);
+  appendMemberLabeledText(article, 'qa-question', '问题', body.question);
+  appendMemberLabeledText(article, 'qa-answer', '研究回答', body.answer);
+  if (Array.isArray(body.basis) && body.basis.length) {
+    const basis = document.createElement('div');
+    basis.className = 'qa-basis';
+    const label = document.createElement('b');
+    label.textContent = '判断依据';
+    const list = document.createElement('ul');
+    body.basis.forEach((point) => {
+      const li = document.createElement('li');
+      li.textContent = point;
+      list.append(li);
+    });
+    basis.append(label, list);
+    article.append(basis);
+  }
+  return article;
+}
+
+function renderMemberItem(item) {
+  if (item.category === 'briefing') return renderMorningBrief(item);
+  if (item.category === 'data-card') return renderDataCard(item);
+  if (item.category === 'event') return renderEventCard(item);
+  if (item.category === 'report') return renderReportCard(item);
+  if (item.category === 'qa') return renderQaCard(item);
+  const article = document.createElement('article');
+  article.className = 'member-content-item';
+  appendMemberMeta(article, item);
+  appendMemberHeading(article, item);
+  return article;
+}
+
 let memberContentItems = [];
 let activeMemberCategory = 'all';
+const memberCategoryLabels = { all: '会员研究内容', briefing: '每日焦煤晨报', 'data-card': '供需数据卡', event: '事件提醒', report: '研究报告库', qa: '会员答疑' };
+const memberContentTitle = document.querySelector('#member-content h2');
 
 function renderMemberContentList() {
   memberContentList.replaceChildren();
@@ -322,16 +504,7 @@ function renderMemberContentList() {
   const latestBrief = items.find((item) => item.category === 'briefing');
   if (latestBrief) memberContentList.append(renderMorningBrief(latestBrief));
   items.filter((item) => item !== latestBrief).forEach((item) => {
-    const article = document.createElement('article');
-    article.className = 'member-content-item';
-    const meta = document.createElement('span');
-    meta.textContent = `${item.category || '研究'} · ${formatDate(item.published_at)}`;
-    const title = document.createElement('h3');
-    title.textContent = item.title;
-    const summary = document.createElement('p');
-    summary.textContent = item.summary || item.body || '暂无摘要';
-    article.append(meta, title, summary);
-    memberContentList.append(article);
+    memberContentList.append(renderMemberItem(item));
   });
 }
 
@@ -342,6 +515,7 @@ function renderMemberContent(items) {
 
 function selectMemberCategory(category) {
   activeMemberCategory = category;
+  if (memberContentTitle) memberContentTitle.textContent = memberCategoryLabels[category] || '会员研究内容';
   document.querySelectorAll('.member-content-tab').forEach((button) => {
     button.classList.toggle('active', button.dataset.memberCategory === category);
   });
@@ -518,10 +692,66 @@ function renderLocalMemberPreview() {
     }),
   };
   const previewItems = [previewBrief,
-    { title: '本周供需数据卡：供应增量仍待确认', summary: '矿山复产、口岸通关、库存与焦化利润的周度变化。', category: 'data-card', published_at: new Date().toISOString() },
-    { title: '事件提醒：焦炭提涨执行与口岸通关', summary: '跟踪焦炭提涨落地、煤矿复产和甘其毛都通关变化。', category: 'event', published_at: new Date().toISOString() },
-    { title: '周报：焦煤供应收缩的传导路径', summary: '复盘供给扰动、进口补充与盘面结构变化。', category: 'report', published_at: new Date(Date.now() - 86400000).toISOString() },
-    { title: '会员答疑：如何判断复产是否形成有效增量？', summary: '从产量、库存和运输三个指标交叉验证。', category: 'qa', published_at: new Date(Date.now() - 86400000).toISOString() },
+    {
+      title: '本周供需数据卡：供应增量仍待确认',
+      summary: '把矿山、口岸、库存和焦化利润放在同一张表里，先看边际变化再看绝对值。',
+      category: 'data-card',
+      published_at: new Date().toISOString(),
+      body: JSON.stringify({
+        asOf: '2026-09-06（示例口径）',
+        metrics: [
+          { label: '主产区开工', value: '72.4%', change: '周环比 +1.8 个百分点', note: '复产名单增加，但有效产量释放滞后', tone: 'up' },
+          { label: '甘其毛都通关', value: '701.5 车/日', change: '较上周 +46 车', note: '恢复仍低于高位区间，蒙煤补充有限', tone: 'up' },
+          { label: '焦煤矿山库存', value: '偏低', change: '连续第 3 周去库', note: '低硫主焦资源更紧，配煤成本有支撑', tone: 'down' },
+          { label: '焦化利润', value: '约 86 元/吨', change: '周环比 -18 元', note: '利润收窄会限制焦炭继续提涨', tone: 'down' },
+        ],
+        takeaway: '供应端的修复暂时没有转化为稳定增量，盘面上行仍需要需求端配合；若通关连续两周站稳 750 车以上，供应偏紧交易才会明显降温。',
+      }),
+    },
+    {
+      title: '事件提醒：焦炭提涨执行与口岸通关',
+      summary: '把未来 7 天可能改变焦煤定价的事件按时间和影响路径排好。',
+      category: 'event',
+      published_at: new Date().toISOString(),
+      body: JSON.stringify({
+        priority: '中高',
+        priorityTone: 'high',
+        timeline: [
+          { time: '09-07', title: '口岸通关数据', detail: '关注甘其毛都日通关是否连续高于 700 车，决定进口煤边际补充强弱。' },
+          { time: '09-08', title: '焦炭提涨执行', detail: '核对钢厂接受范围和落地幅度，若仅局部执行，对焦煤拉动有限。' },
+          { time: '09-09', title: '主产区复产反馈', detail: '跟踪山西、内蒙古复产矿的实际出煤量，区分“复产”与“复产不复量”。' },
+          { time: '09-12', title: '钢厂铁水与利润', detail: '铁水回落且钢厂利润转负时，焦化补库节奏可能放缓。' },
+        ],
+        next: '如果通关回升而矿端库存仍下降，优先关注结构性紧缺；如果通关和复产同步放量，则观察 JM 近月升水能否收敛。',
+      }),
+    },
+    {
+      title: '周报：焦煤供应收缩的传导路径',
+      summary: '从矿端扰动到盘面结构，复盘本周供给收缩如何传导到焦化和钢厂。',
+      category: 'report',
+      published_at: new Date(Date.now() - 86400000).toISOString(),
+      body: JSON.stringify({
+        abstract: '本周核心矛盾仍在供应端：国内复产节奏慢于预期，进口补充尚未形成连续增量，焦化刚需暂时托住价格。',
+        sections: [
+          { heading: '一、供应：恢复有量差', body: '样本矿山开工率回升，但精煤产量恢复慢于原煤，优质低硫主焦仍是最先收紧的品种。' },
+          { heading: '二、进口：增量看通关连续性', body: '单日通关反弹不能等同于进口趋势反转，需要连续 5 个交易日维持在 700 车以上才有实质缓解。' },
+          { heading: '三、需求：刚需尚在，利润约束增强', body: '钢厂铁水维持高位提供焦炭采购支撑，但焦化利润回落会抑制高价原料的追涨。' },
+          { heading: '四、盘面：近月强于远月', body: '近月升水反映现货偏紧，远月交易复产预期；若供应兑现，月差有收敛空间。' },
+        ],
+        highlights: ['偏多条件：矿端库存继续去化、通关低于 700 车、焦炭提涨全面落地。', '转弱条件：复产矿连续放量、通关站上 750 车、铁水快速回落。'],
+      }),
+    },
+    {
+      title: '会员答疑：如何判断复产是否形成有效增量？',
+      summary: '不能只看复产公告，建议用产量、库存和运输三个指标交叉验证。',
+      category: 'qa',
+      published_at: new Date(Date.now() - 86400000).toISOString(),
+      body: JSON.stringify({
+        question: '煤矿宣布复产后，多久可以确认它真的增加了焦煤供应？',
+        answer: '建议至少观察 7-14 天。复产公告只代表具备生产条件，只有精煤产量、矿端库存和发运量同步改善，才算形成有效增量。',
+        basis: ['产量：原煤恢复不等于精煤恢复，重点看洗煤厂精煤产出。', '库存：有效增量应先体现为矿端库存止跌或回升。', '运输：铁路、汽运发运增加，才能传导到焦化厂可用库存。', '价格：若低硫主焦报价仍持续上调，说明增量尚未覆盖刚需。'],
+      }),
+    },
   ];
   currentSession = previewSession;
   renderAuthState(previewSession);
@@ -532,6 +762,7 @@ function renderLocalMemberPreview() {
   const validCategories = ['briefing', 'data-card', 'event', 'report', 'qa'];
   if (validCategories.includes(previewCategory)) {
     activeMemberCategory = previewCategory;
+    if (memberContentTitle) memberContentTitle.textContent = memberCategoryLabels[previewCategory] || '会员研究内容';
     document.querySelectorAll('.member-content-tab').forEach((button) => {
       button.classList.toggle('active', button.dataset.memberCategory === previewCategory);
     });
