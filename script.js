@@ -35,10 +35,30 @@ const briefList = document.querySelector('#briefList');
 const briefAutoMeta = document.querySelector('#briefAutoMeta');
 const categoryLabels = { supply: '供应', demand: '需求', policy: '政策与口岸', market: '市场' };
 
-function renderAutoBrief(data) {
-  if (!Array.isArray(data.items) || !data.items.length) return;
+function renderBriefEmpty(message) {
   briefList.replaceChildren();
-  data.items.slice(0, 12).forEach((item) => {
+  const empty = document.createElement('p');
+  empty.className = 'brief-live-empty';
+  empty.textContent = message;
+  briefList.append(empty);
+  document.querySelector('#emptyState').hidden = true;
+}
+
+function renderAutoBrief(data) {
+  const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+  const recentItems = Array.isArray(data.items)
+    ? data.items.filter((item) => {
+      const timestamp = Date.parse(item.publishedAt || item.published_at || '');
+      return Number.isFinite(timestamp) && timestamp >= cutoff && timestamp <= Date.now() + 60 * 60 * 1000;
+    })
+    : [];
+  if (!recentItems.length) {
+    renderBriefEmpty('最近24小时暂无新的公开资讯');
+    briefAutoMeta.textContent = data.generatedAt ? `最近24小时 · ${new Date(data.generatedAt).toLocaleString('zh-CN')}` : '最近24小时暂无更新';
+    return;
+  }
+  briefList.replaceChildren();
+  recentItems.forEach((item) => {
     const row = document.createElement('article');
     const category = item.category || 'policy';
     row.className = 'brief-row';
@@ -101,7 +121,8 @@ async function loadAutoBrief() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     renderAutoBrief(await response.json());
   } catch (error) {
-    briefAutoMeta.textContent = '公开信息整理';
+    renderBriefEmpty('暂时无法获取最近24小时资讯，请稍后刷新');
+    briefAutoMeta.textContent = '最近24小时 · 获取失败';
   }
 }
 

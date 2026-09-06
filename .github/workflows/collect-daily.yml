@@ -3,10 +3,10 @@ name: Collect public coking coal data
 on:
   workflow_dispatch:
   schedule:
-    # GitHub Actions uses UTC. These run at 09:30, 16:30 and 18:30 Beijing time.
-    - cron: '30 1 * * 1-5'
-    - cron: '30 8 * * 1-5'
-    - cron: '30 10 * * 1-5'
+    # GitHub Actions uses UTC. These run every day at 09:30, 16:30 and 18:30 Beijing time.
+    - cron: '30 1 * * *'
+    - cron: '30 8 * * *'
+    - cron: '30 10 * * *'
     # Monthly statistics window: 10:30 Beijing time on the 15th-20th.
     - cron: '30 2 15-20 * *'
 

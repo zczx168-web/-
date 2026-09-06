@@ -1,61 +1,13 @@
 {
-  "date": "2026年09月05日",
-  "generatedAt": "2026-09-05T22:30:48+08:00",
-  "title": "焦煤日报｜2026年09月05日",
-  "summary": "暂无可用的 DCE 日行情；汇总 6 条公开来源信息。",
+  "date": "2026年09月06日",
+  "generatedAt": "2026-09-05T23:05:25+08:00",
+  "title": "焦煤日报｜2026年09月06日",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 0 条公开来源信息。",
   "market": null,
-  "items": [
-    {
-      "title": "442煤矿周产量",
-      "summary": "CCTD公开发布，建议结合焦煤供需和期货盘面继续跟踪。",
-      "source": "CCTD",
-      "url": "https://www.cctd.com.cn/index.php?m=content&c=index&a=lists&catid=717",
-      "category": "supply",
-      "publishedAt": "2026-09-05T22:30:49+08:00"
-    },
-    {
-      "title": "国内双焦强势上行 新疆焦煤联动涨价",
-      "summary": "CCTD公开发布，建议结合焦煤供需和期货盘面继续跟踪。",
-      "source": "CCTD",
-      "url": "https://www.cctd.com.cn/show-35-256837-1.html",
-      "category": "market",
-      "publishedAt": "2026-09-05T22:30:49+08:00"
-    },
-    {
-      "title": "2026年8月焦煤长协煤钢联动浮动值",
-      "summary": "CCTD公开发布，建议结合焦煤供需和期货盘面继续跟踪。",
-      "source": "CCTD",
-      "url": "https://www.cctd.com.cn/show-35-256820-1.html",
-      "category": "market",
-      "publishedAt": "2026-09-05T22:30:49+08:00"
-    },
-    {
-      "title": "2026年7月焦煤长协煤钢联动浮动值",
-      "summary": "CCTD公开发布，建议结合焦煤供需和期货盘面继续跟踪。",
-      "source": "CCTD",
-      "url": "https://www.cctd.com.cn/show-35-256344-1.html",
-      "category": "market",
-      "publishedAt": "2026-09-05T22:30:49+08:00"
-    },
-    {
-      "title": "2026年6月焦煤长协煤钢联动浮动值",
-      "summary": "CCTD公开发布，建议结合焦煤供需和期货盘面继续跟踪。",
-      "source": "CCTD",
-      "url": "https://www.cctd.com.cn/show-35-255888-1.html",
-      "category": "market",
-      "publishedAt": "2026-09-05T22:30:49+08:00"
-    },
-    {
-      "title": "2026年5月焦煤长协煤钢联动浮动值",
-      "summary": "CCTD公开发布，建议结合焦煤供需和期货盘面继续跟踪。",
-      "source": "CCTD",
-      "url": "https://www.cctd.com.cn/show-35-255484-1.html",
-      "category": "market",
-      "publishedAt": "2026-09-05T22:30:49+08:00"
-    }
-  ],
+  "items": [],
   "sources": [
     "大连商品交易所",
+    "财联社",
     "CCTD",
     "国家统计局",
     "海关总署",
@@ -63,7 +15,7 @@
   ],
   "errors": [
     "海关总署: HTTP Error 504: Gateway Time-out",
-    "DCE: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1032)>"
+    "DCE: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)>"
   ],
-  "fingerprint": "17efb756fbf1379536ed91503c906a3644e79243e9aeaddcbb5938c72a9f5cd2"
+  "fingerprint": "168fa928719162a843e11bbdecdb450f79d5c95ecd9d7f05a528e7813ac43c79"
 }

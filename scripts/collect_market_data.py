@@ -23,26 +23,48 @@ KEYWORDS = ("焦煤", "炼焦煤", "焦炭", "煤矿", "通关", "库存", "复�
 class LinkParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__()
-        self.links: list[tuple[str, str]] = []
+        self.links: list[tuple[str, str, str | None]] = []
         self._href: str | None = None
         self._text: list[str] = []
+        self._row_depth = 0
+        self._row_text: list[str] = []
+        self._row_links: list[tuple[str, str]] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "tr":
+            if self._row_depth == 0:
+                self._row_text = []
+                self._row_links = []
+            self._row_depth += 1
+            return
         if tag != "a":
             return
         self._href = dict(attrs).get("href")
         self._text = []
 
     def handle_data(self, data: str) -> None:
+        if self._row_depth:
+            self._row_text.append(data)
         if self._href is not None:
             self._text.append(data)
 
     def handle_endtag(self, tag: str) -> None:
+        if tag == "tr":
+            if self._row_depth == 1:
+                row_date = extract_date_text(" ".join(self._row_text))
+                self.links.extend((title, href, row_date) for title, href in self._row_links)
+                self._row_text = []
+                self._row_links = []
+            self._row_depth = max(0, self._row_depth - 1)
+            return
         if tag != "a" or self._href is None:
             return
         title = re.sub(r"\s+", " ", "".join(self._text)).strip()
         if title and self._href:
-            self.links.append((title, self._href))
+            if self._row_depth:
+                self._row_links.append((title, self._href))
+            else:
+                self.links.append((title, self._href, None))
         self._href = None
         self._text = []
 
@@ -94,6 +116,36 @@ def classify(title: str) -> str:
     return "market"
 
 
+def extract_date_text(value: str) -> str | None:
+    patterns = (
+        r"20\d{2}[-/.年]\s*\d{1,2}[-/.月]\s*\d{1,2}日?",
+        r"\d{1,2}月\s*\d{1,2}日",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, value)
+        if match:
+            return match.group(0)
+    return None
+
+
+def parse_published_at(value: str | None, now: datetime) -> datetime | None:
+    if not value:
+        return None
+    normalized = value.strip().replace("年", "-").replace("月", "-").replace("日", "")
+    normalized = normalized.replace("/", "-").replace(".", "-")
+    parts = [part for part in normalized.split("-") if part]
+    try:
+        if len(parts) == 2:
+            year, month, day = now.year, int(parts[0]), int(parts[1])
+        elif len(parts) >= 3:
+            year, month, day = int(parts[0]), int(parts[1]), int(parts[2])
+        else:
+            return None
+        return datetime(year, month, day, tzinfo=BEIJING)
+    except ValueError:
+        return None
+
+
 def list_items(source: str, url: str, limit: int = 5) -> tuple[list[dict], str | None]:
     try:
         parser = LinkParser()
@@ -102,10 +154,14 @@ def list_items(source: str, url: str, limit: int = 5) -> tuple[list[dict], str |
         return [], f"{source}: {exc}"
     items: list[dict] = []
     seen: set[str] = set()
-    now = datetime.now(BEIJING).isoformat(timespec="seconds")
-    for title, href in parser.links:
+    now = datetime.now(BEIJING)
+    cutoff = now - timedelta(hours=24)
+    for title, href, date_text in parser.links:
         title = clean_title(title)
         if len(title) < 8 or not any(word in title for word in KEYWORDS):
+            continue
+        published_at = parse_published_at(date_text, now)
+        if published_at is None or published_at < cutoff or published_at > now + timedelta(hours=1):
             continue
         link = urljoin(url, href)
         if link in seen:
@@ -117,7 +173,54 @@ def list_items(source: str, url: str, limit: int = 5) -> tuple[list[dict], str |
             "source": source,
             "url": link,
             "category": classify(title),
-            "publishedAt": now,
+            "publishedAt": published_at.isoformat(timespec="seconds"),
+        })
+        if len(items) >= limit:
+            break
+    return items, None
+
+
+def list_cls_items(limit: int = 50, now: datetime | None = None) -> tuple[list[dict], str | None]:
+    source = "财联社"
+    url = "https://www.cls.cn/subject/1503"
+    try:
+        html = fetch(url)
+        match = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', html, re.S)
+        if not match:
+            raise ValueError("未找到财联社公开数据")
+        document = json.loads(match.group(1))
+        articles = document["props"]["pageProps"]["data"]["articles"]
+    except Exception as exc:  # A source failure must not stop other sources.
+        return [], f"{source}: {exc}"
+
+    now = now or datetime.now(BEIJING)
+    cutoff = now - timedelta(hours=24)
+    items: list[dict] = []
+    seen: set[str] = set()
+    for article in articles:
+        title = str(article.get("article_title") or "").strip()
+        brief = str(article.get("article_brief") or "").strip()
+        article_text = f"{title} {brief}"
+        if not title or not any(word in article_text for word in ("焦煤", "炼焦煤", "焦炭", "焦化", "煤矿", "铁水", "钢厂")):
+            continue
+        try:
+            published_at = datetime.fromtimestamp(int(article["article_time"]), tz=BEIJING)
+        except (KeyError, TypeError, ValueError, OSError):
+            continue
+        if published_at < cutoff or published_at > now + timedelta(hours=1):
+            continue
+        article_id = str(article.get("article_id") or "").strip()
+        if not article_id or article_id in seen:
+            continue
+        seen.add(article_id)
+        link = f"https://www.cls.cn/detail/{article_id}"
+        items.append({
+            "title": clean_title(title),
+            "summary": brief or f"{source}公开发布，涉及焦煤产业链动态。",
+            "source": source,
+            "url": link,
+            "category": classify(title),
+            "publishedAt": published_at.isoformat(timespec="seconds"),
         })
         if len(items) >= limit:
             break
@@ -176,6 +279,10 @@ def build_payload() -> dict:
     ]
     items: list[dict] = []
     errors: list[str] = []
+    cls_items, cls_error = list_cls_items()
+    items.extend(cls_items)
+    if cls_error:
+        errors.append(cls_error)
     for source, url, limit in source_specs:
         found, error = list_items(source, url, limit)
         items.extend(found)
@@ -201,7 +308,7 @@ def build_payload() -> dict:
     unique: dict[str, dict] = {}
     for item in items:
         unique.setdefault(item["url"], item)
-    items = list(unique.values())[:12]
+    items = sorted(unique.values(), key=lambda item: item.get("publishedAt", ""), reverse=True)[:50]
     date_label = datetime.now(BEIJING).strftime("%Y年%m月%d日")
     market_summary = "暂无可用的 DCE 日行情"
     if quote:
@@ -210,10 +317,10 @@ def build_payload() -> dict:
         "date": date_label,
         "generatedAt": fetched_at,
         "title": f"焦煤日报｜{date_label}",
-        "summary": f"{market_summary}；汇总 {len(items)} 条公开来源信息。",
+        "summary": f"{market_summary}；最近 24 小时汇总 {len(items)} 条公开来源信息。",
         "market": quote,
         "items": items,
-        "sources": ["大连商品交易所", "CCTD", "国家统计局", "海关总署", "国家发展改革委"],
+        "sources": ["大连商品交易所", "财联社", "CCTD", "国家统计局", "海关总署", "国家发展改革委"],
         "errors": errors,
     }
     fingerprint = hashlib.sha256(json.dumps({"market": quote, "items": items}, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
