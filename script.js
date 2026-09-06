@@ -266,12 +266,27 @@ const supabaseClient = window.supabase && supabaseConfig.url && supabaseConfig.p
 const edition = document.querySelector('.edition');
 const membershipBadge = document.querySelector('#membershipBadge');
 const refreshMembershipButton = document.querySelector('#refreshMembershipButton');
+const accountNotice = document.querySelector('#accountNotice');
+const accountNoticeTitle = document.querySelector('#accountNoticeTitle');
+const accountNoticeText = document.querySelector('#accountNoticeText');
+const accountNoticeRefresh = document.querySelector('#accountNoticeRefresh');
 const memberContentState = document.querySelector('#memberContentState');
 const memberContentList = document.querySelector('#memberContentList');
 const planNames = { weekly: '7天免费体验', monthly: '月度研究', quarterly: '季度研究' };
 let currentSession = null;
 let currentSubscription = null;
 let currentPaymentRequest = null;
+
+function renderAccountNotice(kind, title, text) {
+  if (!currentSession) {
+    accountNotice.hidden = true;
+    return;
+  }
+  accountNotice.dataset.kind = kind;
+  accountNoticeTitle.textContent = title;
+  accountNoticeText.textContent = text;
+  accountNotice.hidden = false;
+}
 
 function formatDate(value) {
   if (!value) return '';
@@ -293,12 +308,21 @@ function renderMembershipState(subscription, paymentRequest) {
     edition.innerHTML = `<i></i>${planName}会员`;
     membershipBadge.textContent = `${planName}有效`;
     memberContentState.textContent = `当前已开通${planName}${endsAt}，会员权限已同步，可直接查看以下内容。`;
+    renderAccountNotice('active', '会员已开通', `${planName}${endsAt}，会员内容已解锁。`);
     return;
   }
   if (paymentRequest?.status === 'pending') {
     edition.innerHTML = '<i></i>订阅待核验';
     membershipBadge.textContent = '待审核';
     memberContentState.textContent = '付款申请已提交，客服确认后点击“刷新状态”即可同步会员权限。';
+    renderAccountNotice('pending', '申请已提交', '客服正在核验，确认后点击“刷新状态”即可同步权限。');
+    return;
+  }
+  if (paymentRequest?.status === 'rejected') {
+    edition.innerHTML = '<i></i>申请需补充';
+    membershipBadge.textContent = '待处理';
+    memberContentState.textContent = '本次申请未通过，请联系客服核对付款信息后重新提交。';
+    renderAccountNotice('rejected', '申请未通过', '请联系客服核对付款信息后重新提交申请。');
     return;
   }
   edition.innerHTML = '<i></i>正式版';
@@ -306,6 +330,9 @@ function renderMembershipState(subscription, paymentRequest) {
   memberContentState.textContent = currentSession
     ? '当前账号尚未开通会员，订阅审核通过后这里会显示晨报、数据卡和研究报告。'
     : '登录并完成订阅审核后，这里会显示晨报、数据卡和研究报告。';
+  if (currentSession) {
+    renderAccountNotice('neutral', '尚未开通会员', '可选择7天免费体验，或提交月度、季度订阅申请。');
+  }
 }
 
 function parseMorningBrief(item) {
@@ -717,6 +744,7 @@ refreshMembershipButton.addEventListener('click', async () => {
   refreshMembershipButton.textContent = '刷新状态';
   showToast(currentSubscription ? '会员权限已同步' : '暂未检测到已开通的会员权限');
 });
+accountNoticeRefresh.addEventListener('click', () => refreshMembershipButton.click());
 
 function renderLocalMemberPreview() {
   const previewSession = { user: { id: 'local-preview', email: 'member-preview@local.test' } };
