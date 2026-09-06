@@ -14,8 +14,9 @@
     "国家发展改革委"
   ],
   "errors": [
-    "海关总署: HTTP Error 504: Gateway Time-out",
-    "DCE: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)>"
+    "财联社: <urlopen error _ssl.c:993: The handshake operation timed out>",
+    "海关总署: HTTP Error 502: Bad Gateway",
+    "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
   "fingerprint": "168fa928719162a843e11bbdecdb450f79d5c95ecd9d7f05a528e7813ac43c79"
 }
