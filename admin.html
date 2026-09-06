@@ -30,12 +30,13 @@
     <section class="admin-app" id="adminAppView" hidden>
       <div class="admin-page-heading">
         <div><p class="kicker">运营工作台</p><h1>会员申请</h1><p class="admin-lede">审核免费体验和人工收款申请，开通后用户刷新页面即可获得权限。</p></div>
-        <button class="secondary-button" id="adminRefresh" type="button">刷新列表</button>
+        <div class="admin-heading-actions"><button class="secondary-button" id="enableNotifications" type="button">开启新申请提醒</button><button class="secondary-button" id="adminRefresh" type="button">刷新列表</button></div>
       </div>
+      <section class="admin-alert" id="adminAlert" hidden role="alert"><div><strong id="adminAlertTitle">收到新的会员申请</strong><span id="adminAlertText"></span></div><button class="link-button" id="dismissAdminAlert" type="button">知道了</button></section>
       <div class="admin-summary" aria-label="申请统计"><div><span>待处理</span><strong id="pendingCount">0</strong></div><div><span>当前列表</span><strong id="visibleCount">0</strong></div><div><span>登录账号</span><strong id="staffRole">客服</strong></div></div>
       <section class="admin-panel panel">
         <div class="admin-toolbar"><div class="admin-filters" role="tablist" aria-label="申请状态"><button class="admin-filter active" data-status="pending" type="button">待处理</button><button class="admin-filter" data-status="approved" type="button">已通过</button><button class="admin-filter" data-status="rejected" type="button">已拒绝</button><button class="admin-filter" data-status="all" type="button">全部</button></div><label class="admin-search"><span>⌕</span><input id="adminSearch" type="search" placeholder="搜索邮箱或申请编号" aria-label="搜索邮箱或申请编号"></label></div>
-        <p class="admin-list-status" id="adminListStatus" role="status" aria-live="polite"></p>
+        <p class="admin-list-status" id="adminListStatus" role="status" aria-live="polite"></p><span class="admin-last-check" id="adminLastCheck"></span>
         <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>用户</th><th>套餐</th><th>金额</th><th>申请时间</th><th>状态</th><th>操作</th></tr></thead><tbody id="adminRequestRows"></tbody></table></div>
         <div class="admin-empty" id="adminEmpty" hidden><strong>当前没有申请</strong><span>新的申请会自动出现在这里。</span></div>
       </section>
@@ -46,6 +47,6 @@
   <div class="toast" id="adminToast" role="status" aria-live="polite" hidden></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script src="admin.js?v=member-admin-20260906"></script>
+  <script src="admin.js?v=notifications-20260906"></script>
 </body>
 </html>

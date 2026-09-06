@@ -18,12 +18,20 @@ const rowsContainer = document.querySelector('#adminRequestRows');
 const emptyState = document.querySelector('#adminEmpty');
 const searchInput = document.querySelector('#adminSearch');
 const toast = document.querySelector('#adminToast');
+const notificationButton = document.querySelector('#enableNotifications');
+const adminAlert = document.querySelector('#adminAlert');
+const adminAlertText = document.querySelector('#adminAlertText');
+const lastCheck = document.querySelector('#adminLastCheck');
 const statusLabels = { pending: '待处理', approved: '已通过', rejected: '已拒绝' };
 const allowedDomains = ['qq.com', 'foxmail.com', '163.com', '126.com', '139.com', '189.cn', 'wo.cn', 'aliyun.com'];
 let currentSession = null;
 let currentStatus = 'pending';
 let requests = [];
 let toastTimer;
+let pollTimer;
+let knownPendingIds = new Set();
+let hasLoadedPending = false;
+const defaultTitle = document.title;
 
 function setStatus(element, message, type = 'normal') {
   element.textContent = message;
@@ -35,6 +43,41 @@ function showToast(message) {
   toast.hidden = false;
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { toast.hidden = true; }, 2600);
+}
+
+function updateNotificationButton() {
+  if (!('Notification' in window)) {
+    notificationButton.hidden = true;
+    return;
+  }
+  notificationButton.textContent = Notification.permission === 'granted' ? '桌面提醒已开启' : '开启新申请提醒';
+  notificationButton.disabled = Notification.permission === 'granted';
+}
+
+function showNewRequestAlert(items) {
+  if (!items.length) return;
+  const count = items.length;
+  adminAlertText.textContent = `${count} 条新申请等待处理，请在列表中核对套餐后开通。`;
+  adminAlert.hidden = false;
+  showToast(`收到 ${count} 条新的会员申请`);
+  if ('Notification' in window && Notification.permission === 'granted') {
+    const newest = items[0];
+    new Notification('焦煤观察：收到会员申请', {
+      body: `${newest.email || '新用户'}申请${newest.plan_name || newest.plan_code || '会员服务'}${count > 1 ? `，另有 ${count - 1} 条新申请` : ''}`,
+      tag: 'coal-membership-request',
+    });
+  }
+}
+
+function updatePendingState(items, announce = true) {
+  const pendingItems = items.filter((item) => item.status === 'pending');
+  const nextIds = new Set(pendingItems.map((item) => item.id));
+  const newItems = pendingItems.filter((item) => !knownPendingIds.has(item.id));
+  document.querySelector('#pendingCount').textContent = pendingItems.length;
+  document.title = pendingItems.length ? `(${pendingItems.length}) ${defaultTitle}` : defaultTitle;
+  if (announce && newItems.length) showNewRequestAlert(newItems);
+  knownPendingIds = nextIds;
+  hasLoadedPending = true;
 }
 
 function isAllowedEmail(email) {
@@ -125,9 +168,9 @@ function renderRows() {
   document.querySelector('#visibleCount').textContent = visible.length;
 }
 
-async function loadRequests() {
+async function loadRequests({ silent = false } = {}) {
   if (!adminClient || !currentSession) return;
-  setStatus(listStatus, '正在加载申请...');
+  if (!silent) setStatus(listStatus, '正在加载申请...');
   const { data, error } = await adminClient.rpc('admin_list_payment_requests', { p_status: currentStatus });
   if (error) {
     requests = [];
@@ -137,14 +180,23 @@ async function loadRequests() {
   }
   requests = Array.isArray(data) ? data : [];
   renderRows();
-  const pending = currentStatus === 'pending' ? requests.length : await loadPendingCount();
-  document.querySelector('#pendingCount').textContent = pending;
-  setStatus(listStatus, requests.length ? `已加载 ${requests.length} 条申请` : '当前筛选没有申请');
+  const pendingItems = currentStatus === 'pending' ? requests : await loadPendingRequests();
+  updatePendingState(pendingItems, hasLoadedPending || pendingItems.length > 0);
+  lastCheck.textContent = `最近检查：${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}`;
+  if (!silent) setStatus(listStatus, requests.length ? `已加载 ${requests.length} 条申请` : '当前筛选没有申请');
 }
 
-async function loadPendingCount() {
+async function loadPendingRequests() {
   const { data, error } = await adminClient.rpc('admin_list_payment_requests', { p_status: 'pending' });
-  return error || !Array.isArray(data) ? 0 : data.length;
+  return error || !Array.isArray(data) ? [] : data;
+}
+
+function startPolling() {
+  clearInterval(pollTimer);
+  pollTimer = setInterval(() => {
+    if (currentSession && document.visibilityState !== 'hidden') loadRequests({ silent: true });
+    else if (currentSession) loadPendingRequests().then((items) => updatePendingState(items));
+  }, 20000);
 }
 
 async function handleSession(session) {
@@ -158,6 +210,12 @@ async function handleSession(session) {
   if (session) {
     document.querySelector('#staffRole').textContent = '客服';
     await loadRequests();
+    startPolling();
+  } else {
+    clearInterval(pollTimer);
+    document.title = defaultTitle;
+    hasLoadedPending = false;
+    knownPendingIds = new Set();
   }
 }
 
@@ -229,6 +287,13 @@ document.querySelectorAll('.admin-filter').forEach((button) => {
 });
 searchInput.addEventListener('input', renderRows);
 document.querySelector('#adminRefresh').addEventListener('click', loadRequests);
+notificationButton.addEventListener('click', async () => {
+  if (!('Notification' in window)) return;
+  const permission = await Notification.requestPermission();
+  updateNotificationButton();
+  showToast(permission === 'granted' ? '新申请桌面提醒已开启' : '浏览器未允许桌面提醒');
+});
+document.querySelector('#dismissAdminAlert').addEventListener('click', () => { adminAlert.hidden = true; });
 
 rowsContainer.addEventListener('click', async (event) => {
   const button = event.target.closest('button[data-action]');
@@ -251,6 +316,7 @@ rowsContainer.addEventListener('click', async (event) => {
 });
 
 if (adminClient) {
+  updateNotificationButton();
   adminClient.auth.getSession().then(({ data }) => handleSession(data.session));
   adminClient.auth.onAuthStateChange((_event, session) => handleSession(session));
 } else {

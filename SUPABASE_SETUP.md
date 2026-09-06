@@ -104,6 +104,8 @@ https://zczx168-web.github.io/-/admin.html
 
 后台只通过安全数据库函数处理申请。点击“同意并开通”会在一次数据库事务中审核申请并创建 active 订阅；“拒绝”会更新申请状态。客服前端不会保存或读取 service-role key。
 
+客服后台每 20 秒自动检查新申请，并在页面标题和顶部提示待处理数量。首次点击“开启新申请提醒”并允许浏览器通知后，只要后台页面保持打开，即使切换到其他标签页也会收到桌面通知。纯静态 GitHub Pages 无法在后台页面完全关闭时继续推送；如需离线邮件或微信通知，需要另外部署 Supabase Edge Function 并配置邮件或企业微信服务。
+
 如果后台提示“尚未加入客服白名单”，请检查 `public.staff_accounts` 是否已经添加了当前登录账号的 Auth user ID。不要把 service-role key、数据库密码或邮箱授权码放进 `admin.html`、`admin.js` 或 GitHub。
 
 For the daily morning report, publish one row per day with `category = 'briefing'`. Store the structured sections as JSON in `body`; the website renders these six sections automatically:
