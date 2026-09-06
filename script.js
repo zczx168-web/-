@@ -302,8 +302,14 @@ function renderMorningBrief(item) {
   return article;
 }
 
-function renderMemberContent(items) {
+let memberContentItems = [];
+let activeMemberCategory = 'all';
+
+function renderMemberContentList() {
   memberContentList.replaceChildren();
+  const items = activeMemberCategory === 'all'
+    ? memberContentItems
+    : memberContentItems.filter((item) => item.category === activeMemberCategory);
   const latestBrief = items.find((item) => item.category === 'briefing');
   if (latestBrief) memberContentList.append(renderMorningBrief(latestBrief));
   items.filter((item) => item !== latestBrief).forEach((item) => {
@@ -319,6 +325,20 @@ function renderMemberContent(items) {
     memberContentList.append(article);
   });
 }
+
+function renderMemberContent(items) {
+  memberContentItems = items;
+  renderMemberContentList();
+}
+
+document.querySelectorAll('.member-content-tab').forEach((button) => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.member-content-tab').forEach((item) => item.classList.remove('active'));
+    button.classList.add('active');
+    activeMemberCategory = button.dataset.memberCategory;
+    renderMemberContentList();
+  });
+});
 
 async function loadMemberContent(session) {
   renderMemberContent([]);
@@ -363,6 +383,12 @@ async function toggleWatch(button) {
   }
   const label = button.closest('.brief-row')?.dataset.title;
   if (!label) return;
+  if (isLocalMemberPreview) {
+    const saved = button.classList.contains('saved');
+    setWatchButtonState(button, !saved);
+    showToast(!saved ? `预览：已加入${label}` : `预览：已取消${label}`);
+    return;
+  }
   const saved = button.classList.contains('saved');
   button.disabled = true;
   const result = saved
@@ -396,6 +422,12 @@ async function refreshAccount(session) {
 }
 
 async function submitPaymentRequest() {
+  if (isLocalMemberPreview) {
+    localStorage.setItem('coalPending', JSON.stringify(selectedPlan));
+    closeModal('subscribeModal');
+    showToast(`预览：已记录${selectedPlan.name}付款申请`);
+    return;
+  }
   if (!supabaseClient) {
     localStorage.setItem('coalPending', JSON.stringify(selectedPlan));
     closeModal('subscribeModal');
@@ -467,11 +499,17 @@ function renderLocalMemberPreview() {
       watch: ['口岸日通关量', '煤矿实际产量', '焦炭提涨执行情况'],
     }),
   };
+  const previewItems = [previewBrief,
+    { title: '本周供需数据卡：供应增量仍待确认', summary: '矿山复产、口岸通关、库存与焦化利润的周度变化。', category: 'data-card', published_at: new Date().toISOString() },
+    { title: '事件提醒：焦炭提涨执行与口岸通关', summary: '跟踪焦炭提涨落地、煤矿复产和甘其毛都通关变化。', category: 'event', published_at: new Date().toISOString() },
+    { title: '周报：焦煤供应收缩的传导路径', summary: '复盘供给扰动、进口补充与盘面结构变化。', category: 'report', published_at: new Date(Date.now() - 86400000).toISOString() },
+    { title: '会员答疑：如何判断复产是否形成有效增量？', summary: '从产量、库存和运输三个指标交叉验证。', category: 'qa', published_at: new Date(Date.now() - 86400000).toISOString() },
+  ];
   currentSession = previewSession;
   renderAuthState(previewSession);
   renderMembershipState(previewSubscription, null);
   memberContentState.textContent = '本地会员预览：已验证登录状态、会员权限和晨报完整内容。';
-  renderMemberContent([previewBrief]);
+  renderMemberContent(previewItems);
 }
 
 loginButton.addEventListener('click', () => openModal('loginModal'));
@@ -561,6 +599,11 @@ document.querySelector('#clearWatch').addEventListener('click', async () => {
     showToast('请先登录后管理关注清单');
     return;
   }
+  if (isLocalMemberPreview) {
+    document.querySelectorAll('.save-button').forEach((button) => setWatchButtonState(button, false));
+    showToast('预览：关注清单已清空');
+    return;
+  }
   const { error } = await supabaseClient.from('watchlists').delete().eq('user_id', currentSession.user.id);
   if (error) {
     showToast(`清空失败：${error.message}`);
@@ -576,6 +619,10 @@ document.querySelector('.add-watch').addEventListener('click', async () => {
   }
   const label = window.prompt('输入要关注的合约或关键词');
   if (!label?.trim()) return;
+  if (isLocalMemberPreview) {
+    showToast(`预览：已关注${label.trim()}`);
+    return;
+  }
   const { error } = await supabaseClient.from('watchlists').insert({
     user_id: currentSession.user.id,
     label: label.trim(),
