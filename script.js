@@ -505,6 +505,12 @@ document.querySelectorAll('.member-content-tab').forEach((button) => {
 document.querySelectorAll('.service-item-link').forEach((button) => {
   button.addEventListener('click', () => selectMemberCategory(button.dataset.memberCategory));
 });
+document.querySelectorAll('.customer-service-trigger').forEach((button) => {
+  button.addEventListener('click', () => {
+    closeModal('subscribeModal');
+    document.querySelector('#customer-service')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+});
 
 async function loadMemberContent(session) {
   renderMemberContent([]);
