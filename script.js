@@ -258,7 +258,6 @@ const domesticEmailDomains = [
   '189.cn', 'wo.cn', 'aliyun.com', 'sina.com', 'sina.cn', 'sohu.com',
   '21cn.com', '263.net', 'mail.com.cn',
 ];
-const authRedirectUrl = 'https://zczx168-web.github.io/-/';
 const supabaseConfig = window.SUPABASE_CONFIG || {};
 const supabaseClient = window.supabase && supabaseConfig.url && supabaseConfig.publishableKey
   ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.publishableKey)
@@ -276,6 +275,14 @@ const planNames = { weekly: '7天免费体验', monthly: '月度研究', quarter
 let currentSession = null;
 let currentSubscription = null;
 let currentPaymentRequest = null;
+
+function formatAuthError(error, action = '发送验证码') {
+  const message = String(error?.message || '');
+  if (/rate limit|too many|频繁/i.test(message)) return '发送过于频繁，请等待几分钟后再试。';
+  if (/redirect|url|allow list|allowlist/i.test(message)) return '登录跳转地址尚未配置，请联系管理员检查 Supabase 设置。';
+  if (/smtp|email|mail|sending/i.test(message)) return '邮件服务暂时不可用，请检查 SMTP 设置或稍后重试。';
+  return `${action}失败，请稍后重试。${message ? `（${message}）` : ''}`;
+}
 
 function renderAccountNotice(kind, title, text) {
   if (!currentSession) {
@@ -861,13 +868,18 @@ sendLoginLink.addEventListener('click', async () => {
   }
   sendLoginLink.disabled = true;
   loginStatus.textContent = '验证码发送中...';
-  const { error } = await supabaseClient.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: authRedirectUrl },
-  });
+  let error;
+  try {
+    ({ error } = await supabaseClient.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: true },
+    }));
+  } catch (requestError) {
+    error = requestError;
+  }
   sendLoginLink.disabled = false;
   if (error) {
-    loginStatus.textContent = `发送失败：${error.message}`;
+    loginStatus.textContent = formatAuthError(error);
     return;
   }
   loginCodeField.hidden = false;
@@ -889,10 +901,18 @@ verifyLoginCode.addEventListener('click', async () => {
   }
   verifyLoginCode.disabled = true;
   loginStatus.textContent = '正在验证...';
-  const { data, error } = await supabaseClient.auth.verifyOtp({ email, token, type: 'email' });
+  let data;
+  let error;
+  try {
+    ({ data, error } = await supabaseClient.auth.verifyOtp({ email, token, type: 'email' }));
+  } catch (requestError) {
+    error = requestError;
+  }
   verifyLoginCode.disabled = false;
   if (error) {
-    loginStatus.textContent = '验证码无效或已过期，请重新获取';
+    loginStatus.textContent = /expired|invalid|token|验证码/i.test(String(error.message || ''))
+      ? '验证码无效或已过期，请重新获取'
+      : formatAuthError(error, '登录验证');
     return;
   }
   closeModal('loginModal');
