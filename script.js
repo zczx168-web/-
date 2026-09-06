@@ -443,6 +443,37 @@ function renderAuthState(session) {
   loginStatus.textContent = email ? `当前账号：${email}` : '';
 }
 
+function renderLocalMemberPreview() {
+  const previewSession = { user: { id: 'local-preview', email: 'member-preview@local.test' } };
+  const previewSubscription = {
+    plan_code: 'monthly',
+    status: 'active',
+    starts_at: new Date().toISOString(),
+    ends_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+  };
+  const previewBrief = {
+    id: 'preview-brief',
+    title: '今日焦煤晨报：供应恢复节奏仍是核心变量',
+    summary: '国内供应增量有限，进口补充边际改善，短期关注需求承接。',
+    category: 'briefing',
+    visibility: 'member',
+    published_at: new Date().toISOString(),
+    body: JSON.stringify({
+      conclusion: '国内煤矿复产继续推进，但实际增量仍需验证，焦煤短期以高位震荡为主。',
+      overnight: ['财联社焦煤产业链消息已纳入24小时采集', '公开来源暂无重大政策变化'],
+      supply: '主产区复产节奏偏慢，优质主焦煤供应保持偏紧。',
+      imports: '口岸通关边际改善，蒙煤补充能否持续仍需观察。',
+      demand: '焦化刚需仍有支撑，钢厂利润限制原料继续提价空间。',
+      watch: ['口岸日通关量', '煤矿实际产量', '焦炭提涨执行情况'],
+    }),
+  };
+  currentSession = previewSession;
+  renderAuthState(previewSession);
+  renderMembershipState(previewSubscription, null);
+  memberContentState.textContent = '本地会员预览：已验证登录状态、会员权限和晨报完整内容。';
+  renderMemberContent([previewBrief]);
+}
+
 loginButton.addEventListener('click', () => openModal('loginModal'));
 sendLoginLink.addEventListener('click', async () => {
   const email = loginEmail.value.trim();
@@ -509,7 +540,11 @@ signOutButton.addEventListener('click', async () => {
   renderAuthState(null);
   showToast('已退出登录');
 });
-if (supabaseClient) {
+const isLocalMemberPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  && new URLSearchParams(window.location.search).get('preview') === 'member';
+if (isLocalMemberPreview) {
+  renderLocalMemberPreview();
+} else if (supabaseClient) {
   supabaseClient.auth.getSession().then(({ data }) => {
     renderAuthState(data.session);
     refreshAccount(data.session);
