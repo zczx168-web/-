@@ -310,6 +310,15 @@ function renderMemberContentList() {
   const items = activeMemberCategory === 'all'
     ? memberContentItems
     : memberContentItems.filter((item) => item.category === activeMemberCategory);
+  if (!items.length) {
+    const empty = document.createElement('p');
+    empty.className = 'member-content-empty';
+    empty.textContent = currentSubscription
+      ? '该会员板块暂未发布内容，请稍后再来查看。'
+      : '登录并完成订阅审核后，这里会显示会员专属内容。';
+    memberContentList.append(empty);
+    return;
+  }
   const latestBrief = items.find((item) => item.category === 'briefing');
   if (latestBrief) memberContentList.append(renderMorningBrief(latestBrief));
   items.filter((item) => item !== latestBrief).forEach((item) => {
@@ -331,13 +340,22 @@ function renderMemberContent(items) {
   renderMemberContentList();
 }
 
+function selectMemberCategory(category) {
+  activeMemberCategory = category;
+  document.querySelectorAll('.member-content-tab').forEach((button) => {
+    button.classList.toggle('active', button.dataset.memberCategory === category);
+  });
+  renderMemberContentList();
+  document.querySelector('#member-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 document.querySelectorAll('.member-content-tab').forEach((button) => {
   button.addEventListener('click', () => {
-    document.querySelectorAll('.member-content-tab').forEach((item) => item.classList.remove('active'));
-    button.classList.add('active');
-    activeMemberCategory = button.dataset.memberCategory;
-    renderMemberContentList();
+    selectMemberCategory(button.dataset.memberCategory);
   });
+});
+document.querySelectorAll('.service-item-link').forEach((button) => {
+  button.addEventListener('click', () => selectMemberCategory(button.dataset.memberCategory));
 });
 
 async function loadMemberContent(session) {
