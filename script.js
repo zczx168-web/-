@@ -444,37 +444,11 @@ function renderReportCard(item) {
   return article;
 }
 
-function renderQaCard(item) {
-  const body = parseMemberBody(item);
-  const article = document.createElement('article');
-  article.className = 'member-content-item member-content-rich member-content-qa';
-  appendMemberMeta(article, item);
-  appendMemberHeading(article, item);
-  appendMemberLabeledText(article, 'qa-question', '问题', body.question);
-  appendMemberLabeledText(article, 'qa-answer', '研究回答', body.answer);
-  if (Array.isArray(body.basis) && body.basis.length) {
-    const basis = document.createElement('div');
-    basis.className = 'qa-basis';
-    const label = document.createElement('b');
-    label.textContent = '判断依据';
-    const list = document.createElement('ul');
-    body.basis.forEach((point) => {
-      const li = document.createElement('li');
-      li.textContent = point;
-      list.append(li);
-    });
-    basis.append(label, list);
-    article.append(basis);
-  }
-  return article;
-}
-
 function renderMemberItem(item) {
   if (item.category === 'briefing') return renderMorningBrief(item);
   if (item.category === 'data-card') return renderDataCard(item);
   if (item.category === 'event') return renderEventCard(item);
   if (item.category === 'report') return renderReportCard(item);
-  if (item.category === 'qa') return renderQaCard(item);
   const article = document.createElement('article');
   article.className = 'member-content-item';
   appendMemberMeta(article, item);
@@ -484,7 +458,7 @@ function renderMemberItem(item) {
 
 let memberContentItems = [];
 let activeMemberCategory = 'all';
-const memberCategoryLabels = { all: '会员研究内容', briefing: '每日焦煤晨报', 'data-card': '供需数据卡', event: '事件提醒', report: '研究报告库', qa: '会员答疑' };
+const memberCategoryLabels = { all: '会员研究内容', briefing: '每日焦煤晨报', 'data-card': '供需数据卡', event: '事件提醒', report: '研究报告库' };
 const memberContentTitle = document.querySelector('#member-content h2');
 
 function renderMemberContentList() {
@@ -545,12 +519,13 @@ async function loadMemberContent(session) {
     memberContentState.textContent = '会员内容暂时无法加载，请稍后刷新。';
     return;
   }
-  if (!data?.length) {
+  const visibleData = (data || []).filter((item) => item.category !== 'qa');
+  if (!visibleData.length) {
     memberContentState.textContent = '会员内容正在整理，发布后会显示在这里。';
     return;
   }
   memberContentState.textContent = '已按发布时间更新会员专属研究内容。';
-  renderMemberContent(data);
+  renderMemberContent(visibleData);
 }
 
 async function loadWatchlist(session) {
@@ -741,17 +716,6 @@ function renderLocalMemberPreview() {
         highlights: ['偏多条件：矿端库存继续去化、通关低于 700 车、焦炭提涨全面落地。', '转弱条件：复产矿连续放量、通关站上 750 车、铁水快速回落。'],
       }),
     },
-    {
-      title: '会员答疑：如何判断复产是否形成有效增量？',
-      summary: '不能只看复产公告，建议用产量、库存和运输三个指标交叉验证。',
-      category: 'qa',
-      published_at: new Date(Date.now() - 86400000).toISOString(),
-      body: JSON.stringify({
-        question: '煤矿宣布复产后，多久可以确认它真的增加了焦煤供应？',
-        answer: '建议至少观察 7-14 天。复产公告只代表具备生产条件，只有精煤产量、矿端库存和发运量同步改善，才算形成有效增量。',
-        basis: ['产量：原煤恢复不等于精煤恢复，重点看洗煤厂精煤产出。', '库存：有效增量应先体现为矿端库存止跌或回升。', '运输：铁路、汽运发运增加，才能传导到焦化厂可用库存。', '价格：若低硫主焦报价仍持续上调，说明增量尚未覆盖刚需。'],
-      }),
-    },
   ];
   currentSession = previewSession;
   renderAuthState(previewSession);
@@ -759,7 +723,7 @@ function renderLocalMemberPreview() {
   memberContentState.textContent = '本地会员预览：已验证登录状态、会员权限和晨报完整内容。';
   renderMemberContent(previewItems);
   const previewCategory = new URLSearchParams(window.location.search).get('category');
-  const validCategories = ['briefing', 'data-card', 'event', 'report', 'qa'];
+  const validCategories = ['briefing', 'data-card', 'event', 'report'];
   if (validCategories.includes(previewCategory)) {
     activeMemberCategory = previewCategory;
     if (memberContentTitle) memberContentTitle.textContent = memberCategoryLabels[previewCategory] || '会员研究内容';

@@ -88,9 +88,9 @@ values (
 );
 ```
 
-Other member content categories supported by the website are `data-card`, `event`, `report`, and `qa`. They appear under the member content tabs and are filtered without exposing them to unsigned or inactive accounts.
+Other member content categories supported by the website are `data-card`, `event`, and `report`. They appear under the member content tabs and are filtered without exposing them to unsigned or inactive accounts.
 
-For a quick end-to-end test, run `supabase/member-content-seed.sql` after the schema. It inserts one substantive sample item for each member category, including metrics, a dated event timeline, report sections, and a question with evidence-based answer. Replace these seed rows with the daily research content before the public launch.
+For a quick end-to-end test, run `supabase/member-content-seed.sql` after the schema. It inserts one substantive sample item for each member category, including metrics, a dated event timeline, and report sections. Replace these seed rows with the daily research content before the public launch.
 
 ## Free public-source collector
 
