@@ -34,6 +34,13 @@ search.addEventListener('input', renderBriefs);
 const briefList = document.querySelector('#briefList');
 const briefAutoMeta = document.querySelector('#briefAutoMeta');
 const categoryLabels = { supply: '供应', demand: '需求', policy: '政策与口岸', market: '市场' };
+const fallbackBriefItems = [...briefList.querySelectorAll('.brief-row')].map((row) => ({
+  title: row.querySelector('h3')?.textContent.trim() || row.dataset.title || '焦煤市场动态',
+  summary: row.querySelector('.brief-copy p')?.textContent.trim() || '公开行业信息整理',
+  category: row.dataset.type || 'policy',
+  fallbackTime: row.querySelector('.brief-time')?.textContent.trim() || '周五',
+  source: '周五收盘前精选',
+}));
 
 function renderBriefEmpty(message) {
   briefList.replaceChildren();
@@ -46,30 +53,38 @@ function renderBriefEmpty(message) {
 
 function renderAutoBrief(data) {
   const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-  const recentItems = Array.isArray(data.items)
-    ? data.items.filter((item) => {
+  const allItems = Array.isArray(data.items) ? data.items : [];
+  const recentItems = allItems.filter((item) => {
       const timestamp = Date.parse(item.publishedAt || item.published_at || '');
       return Number.isFinite(timestamp) && timestamp >= cutoff && timestamp <= Date.now() + 60 * 60 * 1000;
-    })
-    : [];
-  if (!recentItems.length) {
-    renderBriefEmpty('最近24小时暂无新的公开资讯');
-    briefAutoMeta.textContent = data.generatedAt ? `最近24小时 · ${new Date(data.generatedAt).toLocaleString('zh-CN')}` : '最近24小时暂无更新';
+  });
+  const archivedItems = allItems
+    .filter((item) => Number.isFinite(Date.parse(item.publishedAt || item.published_at || '')))
+    .sort((a, b) => Date.parse(b.publishedAt || b.published_at) - Date.parse(a.publishedAt || a.published_at))
+    .slice(0, 8);
+  const displayItems = recentItems.length ? recentItems : (archivedItems.length ? archivedItems : fallbackBriefItems);
+  const archiveMode = !recentItems.length;
+  if (!displayItems.length) {
+    renderBriefEmpty('最近没有可用的公开资讯');
+    briefAutoMeta.textContent = '暂无更新';
     return;
   }
   briefList.replaceChildren();
-  recentItems.forEach((item) => {
+  displayItems.forEach((item) => {
     const row = document.createElement('article');
     const category = item.category || 'policy';
     row.className = 'brief-row';
     row.dataset.type = category;
     row.dataset.title = item.title;
     const publishedAt = new Date(item.publishedAt || item.published_at || '');
-    const time = Number.isNaN(publishedAt.getTime())
-      ? '今日'
-      : publishedAt.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const time = item.fallbackTime || (Number.isNaN(publishedAt.getTime())
+      ? '周五'
+      : archiveMode
+        ? publishedAt.toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' })
+        : publishedAt.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false }));
     const timeEl = document.createElement('span');
     timeEl.className = 'brief-time';
+    if (archiveMode) timeEl.classList.add('brief-time-archive');
     timeEl.textContent = time;
     const copy = document.createElement('div');
     copy.className = 'brief-copy';
@@ -110,7 +125,11 @@ function renderAutoBrief(data) {
     row.append(timeEl, copy, save);
     briefList.append(row);
   });
-  briefAutoMeta.textContent = data.generatedAt ? `自动汇总 · ${new Date(data.generatedAt).toLocaleString('zh-CN')}` : '自动汇总';
+  if (archiveMode) {
+    briefAutoMeta.textContent = '周末模式 · 显示周五收盘前精选';
+  } else {
+    briefAutoMeta.textContent = data.generatedAt ? `自动汇总 · ${new Date(data.generatedAt).toLocaleString('zh-CN')}` : '自动汇总';
+  }
   bindSaveButtons();
   renderBriefs();
 }
