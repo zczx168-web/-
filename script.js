@@ -265,6 +265,7 @@ const supabaseClient = window.supabase && supabaseConfig.url && supabaseConfig.p
   : null;
 const edition = document.querySelector('.edition');
 const membershipBadge = document.querySelector('#membershipBadge');
+const refreshMembershipButton = document.querySelector('#refreshMembershipButton');
 const memberContentState = document.querySelector('#memberContentState');
 const memberContentList = document.querySelector('#memberContentList');
 const planNames = { weekly: '7天免费体验', monthly: '月度研究', quarterly: '季度研究' };
@@ -291,13 +292,13 @@ function renderMembershipState(subscription, paymentRequest) {
     const endsAt = subscription.ends_at ? ` · 有效期至 ${formatDate(subscription.ends_at)}` : '';
     edition.innerHTML = `<i></i>${planName}会员`;
     membershipBadge.textContent = `${planName}有效`;
-    memberContentState.textContent = `当前已开通${planName}${endsAt}，以下内容仅对会员开放。`;
+    memberContentState.textContent = `当前已开通${planName}${endsAt}，会员权限已同步，可直接查看以下内容。`;
     return;
   }
   if (paymentRequest?.status === 'pending') {
     edition.innerHTML = '<i></i>订阅待核验';
     membershipBadge.textContent = '待审核';
-    memberContentState.textContent = '付款申请已提交，人工核验通过后即可查看会员内容。';
+    memberContentState.textContent = '付款申请已提交，客服确认后点击“刷新状态”即可同步会员权限。';
     return;
   }
   edition.innerHTML = '<i></i>正式版';
@@ -692,12 +693,30 @@ function renderAuthState(session) {
   const email = session?.user?.email;
   loginButton.textContent = email ? '已登录' : '登录';
   signOutButton.hidden = !email;
+  refreshMembershipButton.hidden = !email;
   sendLoginLink.hidden = Boolean(email);
   loginEmail.hidden = Boolean(email);
   loginCodeField.hidden = Boolean(email);
   verifyLoginCode.hidden = Boolean(email);
   loginStatus.textContent = email ? `当前账号：${email}` : '';
 }
+
+refreshMembershipButton.addEventListener('click', async () => {
+  if (!currentSession) {
+    openModal('loginModal');
+    return;
+  }
+  if (isLocalMemberPreview) {
+    showToast('预览：会员权限已同步');
+    return;
+  }
+  refreshMembershipButton.disabled = true;
+  refreshMembershipButton.textContent = '刷新中...';
+  await refreshAccount(currentSession);
+  refreshMembershipButton.disabled = false;
+  refreshMembershipButton.textContent = '刷新状态';
+  showToast(currentSubscription ? '会员权限已同步' : '暂未检测到已开通的会员权限');
+});
 
 function renderLocalMemberPreview() {
   const previewSession = { user: { id: 'local-preview', email: 'member-preview@local.test' } };
