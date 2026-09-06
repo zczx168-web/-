@@ -61,6 +61,29 @@ where payment_requests.id = '<payment_request_id>'
   and payment_requests.status = 'approved';
 ```
 
+客服也可以为已经注册的用户直接开通一次 7 天体验。用户需要先用邮箱完成注册或登录，客服在 Supabase SQL Editor 中按邮箱执行以下 SQL。SQL Editor 使用管理员权限，不要把这段操作放到网页前端：
+
+```sql
+with target_user as (
+  select id
+  from auth.users
+  where lower(email) = lower('用户邮箱@qq.com')
+  limit 1
+)
+insert into public.subscriptions (user_id, plan_code, status, starts_at, ends_at)
+select target_user.id, 'weekly', 'active', now(), now() + interval '7 days'
+from target_user
+where not exists (
+  select 1
+  from public.subscriptions
+  where subscriptions.user_id = target_user.id
+    and subscriptions.status = 'active'
+    and (subscriptions.ends_at is null or subscriptions.ends_at > now())
+);
+```
+
+执行前先用 `select id, email from auth.users where lower(email) = lower('用户邮箱@qq.com');` 检查邮箱确实对应新注册用户。执行后用户刷新网页即可看到 7 天会员状态；已有有效会员不会重复叠加体验期。
+
 After approval, the user refreshes the website. Active subscriptions can read `content` rows with `visibility = 'member'`; expired or unapproved accounts cannot. Add member articles from the `content` table, for example with `category = 'briefing'` and `visibility = 'member'`.
 
 For the daily morning report, publish one row per day with `category = 'briefing'`. Store the structured sections as JSON in `body`; the website renders these six sections automatically:

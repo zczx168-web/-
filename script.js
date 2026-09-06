@@ -169,6 +169,10 @@ function closeModal(id) {
 }
 document.querySelector('#openMethod').addEventListener('click', () => openModal('methodModal'));
 document.querySelectorAll('.subscribe-trigger').forEach((button) => button.addEventListener('click', () => openModal('subscribeModal')));
+document.querySelectorAll('.free-trial-trigger').forEach((button) => button.addEventListener('click', () => {
+  openModal('subscribeModal');
+  document.querySelector('.plan-option[data-plan-code="weekly"]')?.click();
+}));
 document.querySelectorAll('[data-close]').forEach((button) => button.addEventListener('click', () => closeModal(button.dataset.close)));
 document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.addEventListener('click', (event) => { if (event.target === backdrop) closeModal(backdrop.id); }));
 document.addEventListener('keydown', (event) => {
@@ -659,7 +663,7 @@ async function submitPaymentRequest() {
   if (!session) {
     closeModal('subscribeModal');
     openModal('loginModal');
-    loginStatus.textContent = '请先登录，再提交付款申请';
+    loginStatus.textContent = isFreeTrial ? '请先登录，再提交免费体验申请' : '请先登录，再提交付款申请';
     return;
   }
   paymentDone.disabled = true;
