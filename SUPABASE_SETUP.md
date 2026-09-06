@@ -16,8 +16,7 @@
    };
    ```
 
-The website uses email OTP verification and keeps the production GitHub Pages URL as the auth redirect:
-`https://zczx168-web.github.io/-/`. Add this exact URL to Supabase's redirect allowlist.
+The website now uses direct email OTP verification and does not rely on clicking a link in the email. The production URL can remain in the redirect allowlist for future magic-link use, but it is not required for the current 8-digit code flow.
 
 The publishable key is intended for browser use. Never put a database password or service-role key in this file.
 
@@ -38,6 +37,8 @@ After SMTP is saved, open `Authentication > Notifications > Emails > Templates` 
 Save the template, then request a new verification code from the production website. Existing emails keep their original English content.
 
 The current project sends eight-digit codes. Keep `Authentication > Sign In / Providers > Email > Email OTP length` set to `8` so it matches the website. The `{{ .Token }}` value comes from this setting; changing the email template text alone does not change the code length. Request a fresh code after saving because previously issued codes keep their original length.
+
+If the homepage shows a Chinese send error, check these items in order: Email provider is enabled; the SMTP mailbox and authorization code are valid; the sender address matches the configured mailbox; and the same address has not requested too many codes in a short period. Supabase rate limits can temporarily block repeated tests, so wait a few minutes before requesting a new code. The homepage displays the provider error in Chinese after each request.
 
 Run `supabase/schema.sql` in the Supabase SQL Editor after the project is created. It creates profiles, plans, subscriptions, payment requests, member content, watchlists, and Row Level Security policies.
 
