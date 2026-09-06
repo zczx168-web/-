@@ -61,6 +61,33 @@ where payment_requests.id = '<payment_request_id>'
 
 After approval, the user refreshes the website. Active subscriptions can read `content` rows with `visibility = 'member'`; expired or unapproved accounts cannot. Add member articles from the `content` table, for example with `category = 'briefing'` and `visibility = 'member'`.
 
+For the daily morning report, publish one row per day with `category = 'briefing'`. Store the structured sections as JSON in `body`; the website renders these six sections automatically:
+
+```json
+{
+  "conclusion": "国内供应释放有限，焦煤短期高位震荡偏强。",
+  "overnight": "财联社和 CCTD：列出隔夜最重要的 3-8 条变化。",
+  "supply": "煤矿复产、产量、安监和库存变化。",
+  "imports": "甘其毛都通关、蒙煤价格和进口补充。",
+  "demand": "焦炭价格、钢厂利润、铁水和焦化利润。",
+  "watch": "今天重点跟踪口岸通关、煤矿增量和焦炭提涨执行。"
+}
+```
+
+Example insert:
+
+```sql
+insert into public.content (title, summary, body, category, visibility, published_at)
+values (
+  '9月6日焦煤晨报：供应释放有限，高位震荡偏强',
+  '国内供应修复仍慢，进口补充尚未形成连续增量。',
+  '{"conclusion":"国内供应释放有限，焦煤短期高位震荡偏强。","overnight":"财联社：焦煤相关期货和产业链消息摘要。","supply":"煤矿复产以恢复产能为主，实际增量有限。","imports":"口岸通关边际改善，但尚未形成连续补充。","demand":"焦炭提涨改善焦企利润，钢厂承接能力仍需观察。","watch":"重点跟踪口岸通关、煤矿增量和焦炭提涨执行。"}',
+  'briefing',
+  'member',
+  now()
+);
+```
+
 ## Free public-source collector
 
 The GitHub Actions workflow at `.github/workflows/collect-daily.yml` runs at several Beijing-time windows and executes `scripts/collect_market_data.py`. It reads public pages from DCE, CCTD, the National Bureau of Statistics, Customs, and NDRC, then writes a deduplicated digest to `data/daily-brief.json`. The website loads this file into the public `焦煤快讯` panel. Run the workflow manually from the GitHub Actions tab to test it; scheduled runs may be delayed by GitHub and a source can be skipped when its public page is unavailable. The collector records such warnings in the JSON instead of fabricating data.

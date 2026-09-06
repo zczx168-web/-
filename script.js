@@ -258,9 +258,55 @@ function renderMembershipState(subscription, paymentRequest) {
     : '登录并完成订阅审核后，这里会显示晨报、数据卡和研究报告。';
 }
 
+function parseMorningBrief(item) {
+  const fallback = { conclusion: item.summary || item.body || '暂无晨报摘要' };
+  if (!item.body) return fallback;
+  try {
+    const parsed = JSON.parse(item.body);
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? { ...fallback, ...parsed } : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function appendBriefSection(container, label, value) {
+  if (!value) return;
+  const section = document.createElement('section');
+  section.className = 'morning-brief-section';
+  const heading = document.createElement('span');
+  heading.textContent = label;
+  const text = document.createElement('p');
+  text.textContent = Array.isArray(value) ? value.join('；') : String(value);
+  section.append(heading, text);
+  container.append(section);
+}
+
+function renderMorningBrief(item) {
+  const brief = parseMorningBrief(item);
+  const article = document.createElement('article');
+  article.className = 'morning-brief-card';
+  const meta = document.createElement('div');
+  meta.className = 'morning-brief-meta';
+  meta.textContent = `今日晨报 · ${formatDate(item.published_at)}`;
+  const title = document.createElement('h3');
+  title.textContent = item.title;
+  const sections = document.createElement('div');
+  sections.className = 'morning-brief-grid';
+  appendBriefSection(sections, '今日结论', brief.conclusion);
+  appendBriefSection(sections, '隔夜重点', brief.overnight);
+  appendBriefSection(sections, '供应端', brief.supply);
+  appendBriefSection(sections, '进口端', brief.imports || brief.import);
+  appendBriefSection(sections, '需求端', brief.demand);
+  appendBriefSection(sections, '今日观察', brief.watch || brief.observation);
+  article.append(meta, title, sections);
+  return article;
+}
+
 function renderMemberContent(items) {
   memberContentList.replaceChildren();
-  items.forEach((item) => {
+  const latestBrief = items.find((item) => item.category === 'briefing');
+  if (latestBrief) memberContentList.append(renderMorningBrief(latestBrief));
+  items.filter((item) => item !== latestBrief).forEach((item) => {
     const article = document.createElement('article');
     article.className = 'member-content-item';
     const meta = document.createElement('span');
