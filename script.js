@@ -510,6 +510,15 @@ function renderLocalMemberPreview() {
   renderMembershipState(previewSubscription, null);
   memberContentState.textContent = '本地会员预览：已验证登录状态、会员权限和晨报完整内容。';
   renderMemberContent(previewItems);
+  const previewCategory = new URLSearchParams(window.location.search).get('category');
+  const validCategories = ['briefing', 'data-card', 'event', 'report', 'qa'];
+  if (validCategories.includes(previewCategory)) {
+    activeMemberCategory = previewCategory;
+    document.querySelectorAll('.member-content-tab').forEach((button) => {
+      button.classList.toggle('active', button.dataset.memberCategory === previewCategory);
+    });
+    renderMemberContentList();
+  }
 }
 
 loginButton.addEventListener('click', () => openModal('loginModal'));
