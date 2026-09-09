@@ -1,19 +1,10 @@
 {
-  "date": "2026年09月08日",
-  "generatedAt": "2026-09-08T20:57:27+08:00",
-  "title": "焦煤日报｜2026年09月08日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
+  "date": "2026年09月09日",
+  "generatedAt": "2026-09-09T14:30:49+08:00",
+  "title": "焦煤日报｜2026年09月09日",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 0 条公开来源信息。",
   "market": null,
-  "items": [
-    {
-      "title": "财联社9月8日电，煤炭板块震荡拉升，云煤能源涨停，郑州煤电、陕西黑猫、广汇能源、安泰集团跟涨。消息面上，9月8日，生意社焦炭基准价为2125.00元/吨，与本月初(1960.00元/吨)相比，上涨了8.42%。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2476631",
-      "category": "demand",
-      "publishedAt": "2026-09-08T10:15:16+08:00"
-    }
-  ],
+  "items": [],
   "sources": [
     "大连商品交易所",
     "财联社",
@@ -23,8 +14,8 @@
     "国家发展改革委"
   ],
   "errors": [
-    "海关总署: HTTP Error 504: Gateway Time-out",
+    "海关总署: HTTP Error 502: Bad Gateway",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "d028429be8d2e04711a84ccec140a08dc8de23f0302e2a88a354f08ecae48be6"
+  "fingerprint": "168fa928719162a843e11bbdecdb450f79d5c95ecd9d7f05a528e7813ac43c79"
 }
