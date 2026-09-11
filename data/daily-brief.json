@@ -39,7 +39,7 @@
     "国家发展改革委"
   ],
   "errors": [
-    "海关总署: HTTP Error 504: Gateway Time-out",
+    "海关总署: HTTP Error 502: Bad Gateway",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
   "fingerprint": "45bd4cc6f00ddff101cd3c9391d0cc34702abbb1c0f02881e7ec36eeccf768e8"
