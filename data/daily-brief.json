@@ -1,17 +1,17 @@
 {
-  "date": "2026年09月15日",
-  "generatedAt": "2026-09-15T21:44:19+08:00",
-  "title": "焦煤日报｜2026年09月15日",
+  "date": "2026年09月16日",
+  "generatedAt": "2026-09-16T14:32:28+08:00",
+  "title": "焦煤日报｜2026年09月16日",
   "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
   "market": null,
   "items": [
     {
-      "title": "财联社9月15日电，国内商品期货开盘涨跌不一，原油涨超6%，焦煤、燃料油涨超3%，沥青、对二甲苯、瓶片涨超2%。沪锡跌超2%，铂、玻璃、沪银、纯碱、碳酸锂跌超1%。",
+      "title": "财联社9月16日电，国内商品期货开盘涨跌不一，乙二醇涨超4%，瓶片、短纤涨超3%，甲醇、沥青涨超2%，跌幅方面，沪镍、集运欧线跌超2%，PVC、不锈钢、焦煤、玻璃跌超1%。",
       "summary": "财联社公开发布，涉及焦煤产业链动态。",
       "source": "财联社",
-      "url": "https://www.cls.cn/detail/2482990",
+      "url": "https://www.cls.cn/detail/2484350",
       "category": "market",
-      "publishedAt": "2026-09-15T09:00:52+08:00"
+      "publishedAt": "2026-09-16T09:01:06+08:00"
     }
   ],
   "sources": [
@@ -26,5 +26,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "55f18c32a4247558c79edd9d8e61e4e67e8d1e27387a789dabadf511d0a69757"
+  "fingerprint": "89b6daaea06dff7eb302d7920747591f8b153b73b34a9f8bffb5a1d51e25d5de"
 }
