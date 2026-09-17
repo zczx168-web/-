@@ -1,17 +1,17 @@
 {
-  "date": "2026年09月16日",
-  "generatedAt": "2026-09-16T14:32:28+08:00",
-  "title": "焦煤日报｜2026年09月16日",
+  "date": "2026年09月17日",
+  "generatedAt": "2026-09-17T14:31:49+08:00",
+  "title": "焦煤日报｜2026年09月17日",
   "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
   "market": null,
   "items": [
     {
-      "title": "财联社9月16日电，国内商品期货开盘涨跌不一，乙二醇涨超4%，瓶片、短纤涨超3%，甲醇、沥青涨超2%，跌幅方面，沪镍、集运欧线跌超2%，PVC、不锈钢、焦煤、玻璃跌超1%。",
+      "title": "财联社9月17日电，煤炭板块午后活跃，云煤能源涨停，郑州煤电、大有能源、陕西黑猫跟涨。消息面上，近期山西炼焦煤矿山复产进程受阻，Mysteel本周继续统计炼焦煤矿山生产情况，自5月23日以来山西出现过停产现象的煤矿共计204座，产能共计2.75亿吨。截至9月16日当天处于停产状态的煤矿共计75座，产能共计7290万吨。",
       "summary": "财联社公开发布，涉及焦煤产业链动态。",
       "source": "财联社",
-      "url": "https://www.cls.cn/detail/2484350",
-      "category": "market",
-      "publishedAt": "2026-09-16T09:01:06+08:00"
+      "url": "https://www.cls.cn/detail/2485978",
+      "category": "supply",
+      "publishedAt": "2026-09-17T13:50:23+08:00"
     }
   ],
   "sources": [
@@ -26,5 +26,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "89b6daaea06dff7eb302d7920747591f8b153b73b34a9f8bffb5a1d51e25d5de"
+  "fingerprint": "c3a189f28344b36c5072dba064e07f83abdbf058f15c0373bdc4392c2a7513fa"
 }
