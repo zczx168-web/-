@@ -1,8 +1,8 @@
 {
   "date": "2026年09月18日",
-  "generatedAt": "2026-09-18T15:33:58+08:00",
+  "generatedAt": "2026-09-18T21:03:13+08:00",
   "title": "焦煤日报｜2026年09月18日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 6 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 4 条公开来源信息。",
   "market": null,
   "items": [
     {
@@ -36,22 +36,6 @@
       "url": "https://www.cls.cn/detail/2486732",
       "category": "demand",
       "publishedAt": "2026-09-18T09:00:41+08:00"
-    },
-    {
-      "title": "财联社9月17日电，印度煤炭部启动第16轮煤矿拍卖。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2486410",
-      "category": "supply",
-      "publishedAt": "2026-09-17T19:48:27+08:00"
-    },
-    {
-      "title": "财联社9月17日电，今日海运炼焦煤港口现货弱势运行。港口炼焦煤库存周环比去化尚可，配煤资源仍旧相对丰富，骨架资源后续有到港预期；终端市场压价询货，且利润博弈明显；贸易环节报价松动，配煤资源让价幅度上升，骨架资源报价仍旧坚挺，部分煤种价格下降5-50元/吨。短期来看，焦炭价格有望持稳运行，但继续提涨空间有限，需关注钢价走势及终端需求能否有效释放。 (我的钢铁网)",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2486338",
-      "category": "demand",
-      "publishedAt": "2026-09-17T18:34:45+08:00"
     }
   ],
   "sources": [
@@ -66,5 +50,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "dc37aa10ddbf242916f8346322fbd08b53bc486bcdc08b674e025e867718ef22"
+  "fingerprint": "95737bc2be0742771d8ce1ac3947b14baf9ec6faa1d2758c65d7fe53ed1d7ccb"
 }
