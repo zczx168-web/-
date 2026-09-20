@@ -1,10 +1,19 @@
 {
   "date": "2026年09月20日",
-  "generatedAt": "2026-09-19T14:25:22+08:00",
+  "generatedAt": "2026-09-20T21:08:25+08:00",
   "title": "焦煤日报｜2026年09月20日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 0 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
   "market": null,
-  "items": [],
+  "items": [
+    {
+      "title": "财联社9月20日电，临近中秋假期蒙煤三大口口岸闭关，短期通关放量仍然有限，口岸库存已降至较低水平，蒙煤价格底部支撑仍在，口岸贸易商报价暂稳，实际成交稀少，后续应继续关注通关恢复及期货盘面波动对市场价格的影响。长治市沁源县今日新增复产1座煤矿，核定产能90万吨，涉及煤种为高硫主焦煤，原煤日产约0.05万吨，该县累计已复产煤矿8座，总产能1020万吨。 (我的钢铁网)",
+      "summary": "财联社公开发布，涉及焦煤产业链动态。",
+      "source": "财联社",
+      "url": "https://www.cls.cn/detail/2488311",
+      "category": "supply",
+      "publishedAt": "2026-09-20T20:38:11+08:00"
+    }
+  ],
   "sources": [
     "大连商品交易所",
     "财联社",
@@ -14,8 +23,8 @@
     "国家发展改革委"
   ],
   "errors": [
-    "海关总署: HTTP Error 502: Bad Gateway",
+    "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "168fa928719162a843e11bbdecdb450f79d5c95ecd9d7f05a528e7813ac43c79"
+  "fingerprint": "b0f9d1b701544ed9b1f9e5b4da5fd59a9646ea7b68eab85eeffd1721a76c5e0b"
 }
