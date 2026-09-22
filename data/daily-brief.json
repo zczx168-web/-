@@ -1,8 +1,8 @@
 {
   "date": "2026年09月22日",
-  "generatedAt": "2026-09-22T14:40:14+08:00",
+  "generatedAt": "2026-09-22T21:32:26+08:00",
   "title": "焦煤日报｜2026年09月22日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 3 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 2 条公开来源信息。",
   "market": null,
   "items": [
     {
@@ -20,14 +20,6 @@
       "url": "https://www.cls.cn/detail/2489779",
       "category": "market",
       "publishedAt": "2026-09-22T11:31:15+08:00"
-    },
-    {
-      "title": "财联社9月21日电，根据中蒙两国双边协定，9月25日中秋节当日，三大口岸闭关1天，10月1日-7日国庆节期间口岸闭关7天，10月8日恢复通关。近期蒙煤口岸通关维持低位，进口供应持续收紧，库存去化预期浓厚。供应端，虽然近期市场供给预期边际松动，但目前炼焦煤整体供应仍处于相对偏紧状态，短期内实际增量有限，市场情绪持续偏弱，线上竞拍流拍率持续高位。长治沁源低硫瘦焦煤成交均价2353元/吨，降47元/吨。 (我的钢铁网)",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2489274",
-      "category": "supply",
-      "publishedAt": "2026-09-21T20:00:51+08:00"
     }
   ],
   "sources": [
@@ -42,5 +34,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "298a71384acb0a47d5ea5c6ba882f25fca1cb01d5cfcbd9b9fc3c797f35175e7"
+  "fingerprint": "48c7b7d66ceee85f9fa113df9438ea60339cafd0128c5b2a6400384fdfa52897"
 }
