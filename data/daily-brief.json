@@ -1,19 +1,10 @@
 {
   "date": "2026年09月25日",
-  "generatedAt": "2026-09-25T14:28:59+08:00",
+  "generatedAt": "2026-09-25T22:01:19+08:00",
   "title": "焦煤日报｜2026年09月25日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 0 条公开来源信息。",
   "market": null,
-  "items": [
-    {
-      "title": "财联社9月24日电，印尼煤矿公司巴彦资源宣布，在获得2026年采矿配额修订批准后，解除不可抗力。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2492413",
-      "category": "supply",
-      "publishedAt": "2026-09-24T17:10:51+08:00"
-    }
-  ],
+  "items": [],
   "sources": [
     "大连商品交易所",
     "财联社",
@@ -26,5 +17,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "05a34a4d8d6cc7726e19b51e80c572d6ad5908b28c072560510a80a57e85fb3d"
+  "fingerprint": "168fa928719162a843e11bbdecdb450f79d5c95ecd9d7f05a528e7813ac43c79"
 }
