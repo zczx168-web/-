@@ -1,8 +1,8 @@
 {
-  "date": "2026年09月24日",
-  "generatedAt": "2026-09-24T21:39:46+08:00",
-  "title": "焦煤日报｜2026年09月24日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 4 条公开来源信息。",
+  "date": "2026年09月25日",
+  "generatedAt": "2026-09-25T14:28:59+08:00",
+  "title": "焦煤日报｜2026年09月25日",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
   "market": null,
   "items": [
     {
@@ -12,30 +12,6 @@
       "url": "https://www.cls.cn/detail/2492413",
       "category": "supply",
       "publishedAt": "2026-09-24T17:10:51+08:00"
-    },
-    {
-      "title": "财联社9月24日电，国内期货主力合约涨跌不一，碳酸锂跌超4%，沪银、铂跌超3%，集运欧线、多晶硅、钯跌超2%，焦煤、生猪跌超1%。涨幅方面，SC原油涨超4%，燃料油、合成橡胶涨超3%，低硫燃料油（LU）、20号胶涨近3%，液化石油气（LPG）、瓶片、PTA涨超2%。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2492009",
-      "category": "market",
-      "publishedAt": "2026-09-24T11:32:06+08:00"
-    },
-    {
-      "title": "财联社9月24日电，国内商品期货开盘，原油涨超4%，BR橡胶、燃料油涨超3%，苯乙烯、纯苯、瓶片、液化气涨超2%。铂、沪银、钯跌超2%，不锈钢、焦煤、多晶硅、碳酸锂跌超1%。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2491829",
-      "category": "market",
-      "publishedAt": "2026-09-24T09:00:32+08:00"
-    },
-    {
-      "title": "2026年9月焦煤长协煤钢联动浮动值",
-      "summary": "CCTD公开发布，建议结合焦煤供需和期货盘面继续跟踪。",
-      "source": "CCTD",
-      "url": "https://www.cctd.com.cn/show-35-257291-1.html",
-      "category": "market",
-      "publishedAt": "2026-09-24T00:00:00+08:00"
     }
   ],
   "sources": [
@@ -50,5 +26,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "8572fc44c306637fa5da56cd6e33ef62e8931a65ece8f9a3c2f370799d31369e"
+  "fingerprint": "05a34a4d8d6cc7726e19b51e80c572d6ad5908b28c072560510a80a57e85fb3d"
 }
