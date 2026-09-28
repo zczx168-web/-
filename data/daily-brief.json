@@ -1,10 +1,18 @@
 {
-  "date": "2026年09月28日",
-  "generatedAt": "2026-09-28T15:26:44+08:00",
-  "title": "焦煤日报｜2026年09月28日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 2 条公开来源信息。",
+  "date": "2026年09月29日",
+  "generatedAt": "2026-09-29T00:52:03+08:00",
+  "title": "焦煤日报｜2026年09月29日",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 3 条公开来源信息。",
   "market": null,
   "items": [
+    {
+      "title": "财联社9月28日电，大宗商品经纪商DBX Commodities表示，受政府削减煤矿配额及主要运输河流水位偏低影响，印尼本月煤炭出口降至五年来最低水平。",
+      "summary": "财联社公开发布，涉及焦煤产业链动态。",
+      "source": "财联社",
+      "url": "https://www.cls.cn/detail/2494086",
+      "category": "supply",
+      "publishedAt": "2026-09-28T15:50:43+08:00"
+    },
     {
       "title": "财联社9月28日电，国内期货主力合约多数下跌，碳酸锂、沪银跌超4%，生猪跌超3%，钯跌近3%，焦煤、红枣、玻璃、沪金跌超2%。涨幅方面，集运欧线涨超5%，甲醇涨超4%，燃料油涨超3%，豆一涨近2%，丙烯、液化石油气（LPG）、多晶硅、沥青涨超1%。",
       "summary": "财联社公开发布，涉及焦煤产业链动态。",
@@ -34,5 +42,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "1c62516ab2306ac35535bbd01ac53f6433966dd6d8f1d553dfb2f0ce4dbb30ec"
+  "fingerprint": "983d9b21dcc226b44ee90aa10f23029caaa75991c7a7e6b36d5c891ba9c2684f"
 }
