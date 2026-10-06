@@ -14,7 +14,6 @@
     "国家发展改革委"
   ],
   "errors": [
-    "CCTD: <urlopen error [Errno 111] Connection refused>",
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
