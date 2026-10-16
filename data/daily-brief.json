@@ -1,19 +1,10 @@
 {
   "date": "2026年10月16日",
-  "generatedAt": "2026-10-15T21:34:52+08:00",
+  "generatedAt": "2026-10-16T21:23:33+08:00",
   "title": "焦煤日报｜2026年10月16日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 0 条公开来源信息。",
   "market": null,
-  "items": [
-    {
-      "title": "财联社10月15日电，国内市场炼焦煤震荡运行，进口蒙古国炼焦煤市场涨跌互现。供应端，国庆期间放假停产煤矿以及9月底、季度产量任务完成的煤矿集中复产，叠加部分区域煤矿复产验收审批流程加快，本周产量快速攀升。本周全国523家矿山原煤日产环比增加11.6万吨，精煤库存环比增加7.0万吨。同时产地竞拍成交回暖、流拍率降至低位，短期市场情绪较前期有所改善。 (我的钢铁网)",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2505988",
-      "category": "supply",
-      "publishedAt": "2026-10-15T19:26:22+08:00"
-    }
-  ],
+  "items": [],
   "sources": [
     "大连商品交易所",
     "财联社",
@@ -26,5 +17,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "1017e1f10518d99de8b570176c674f688d72e9f9ca1116a824cd4b4bce74ea97"
+  "fingerprint": "168fa928719162a843e11bbdecdb450f79d5c95ecd9d7f05a528e7813ac43c79"
 }
