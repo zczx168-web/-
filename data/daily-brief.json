@@ -1,10 +1,19 @@
 {
   "date": "2026年10月20日",
-  "generatedAt": "2026-10-19T16:01:38+08:00",
+  "generatedAt": "2026-10-20T21:44:06+08:00",
   "title": "焦煤日报｜2026年10月20日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 0 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
   "market": null,
-  "items": [],
+  "items": [
+    {
+      "title": "财联社10月20日电，据山西省能源局消息，9月26日全省煤炭安全稳产稳供工作推进会召开以来，煤矿复工复产步伐明显加快，原煤产量持续抬升，9月日均产量较8月提升约22万吨，10月以来日产量加快恢复，稳产稳供向好态势持续巩固。下一步，山西将系统施治、严实监管，守牢安全生产底线，扛稳能源保供重任，为夯实今冬明春供暖季煤炭保供贡献山西力量。",
+      "summary": "财联社公开发布，涉及焦煤产业链动态。",
+      "source": "财联社",
+      "url": "https://www.cls.cn/detail/2510160",
+      "category": "supply",
+      "publishedAt": "2026-10-20T19:50:20+08:00"
+    }
+  ],
   "sources": [
     "大连商品交易所",
     "财联社",
@@ -17,5 +26,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "168fa928719162a843e11bbdecdb450f79d5c95ecd9d7f05a528e7813ac43c79"
+  "fingerprint": "073b561f04896c5d4498dff8a1a3f710cb638fe8aa5ba84a67f9dbb1171be722"
 }
