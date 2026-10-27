@@ -1,17 +1,25 @@
 {
   "date": "2026年10月27日",
-  "generatedAt": "2026-10-26T14:48:04+08:00",
+  "generatedAt": "2026-10-27T14:41:46+08:00",
   "title": "焦煤日报｜2026年10月27日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 2 条公开来源信息。",
   "market": null,
   "items": [
     {
-      "title": "财联社10月26日电，国内期货主力合约多数上涨，甲醇、沥青涨超5%，丙烯涨近4%，聚丙烯、聚丙烯月均、燃料油、合成橡胶涨超3%，苯乙烯（EB）涨近3%。跌幅方面，烧碱跌超3%，豆一、苹果跌超2%，生猪、沪镍跌近2%，红枣、焦煤、焦炭跌超1%。",
+      "title": "财联社10月27日电，国内商品期货开盘多数下跌，烧碱跌超4%，棕榈油、苯乙烯跌超2%，焦煤、棉花、白糖、豆油、原油、生猪跌超1%。沥青涨超3%，碳酸锂涨超2%。",
       "summary": "财联社公开发布，涉及焦煤产业链动态。",
       "source": "财联社",
-      "url": "https://www.cls.cn/detail/2514808",
-      "category": "demand",
-      "publishedAt": "2026-10-26T11:36:39+08:00"
+      "url": "https://www.cls.cn/detail/2515997",
+      "category": "market",
+      "publishedAt": "2026-10-27T09:00:27+08:00"
+    },
+    {
+      "title": "2026年10月焦煤长协煤钢联动浮动值",
+      "summary": "CCTD公开发布，建议结合焦煤供需和期货盘面继续跟踪。",
+      "source": "CCTD",
+      "url": "https://www.cctd.com.cn/show-35-257661-1.html",
+      "category": "market",
+      "publishedAt": "2026-10-27T00:00:00+08:00"
     }
   ],
   "sources": [
@@ -26,5 +34,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "5b62651d817c57aa1c1ffae89cc66839370179daf168d5df049889a8307a322e"
+  "fingerprint": "94b350ebaa97a4a8950af71c7772460a424fdb7beb71c563749e99b2c9adf250"
 }
