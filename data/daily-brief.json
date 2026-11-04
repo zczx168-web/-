@@ -1,8 +1,8 @@
 {
   "date": "2026年11月04日",
-  "generatedAt": "2026-11-04T00:24:25+08:00",
+  "generatedAt": "2026-11-04T15:54:04+08:00",
   "title": "焦煤日报｜2026年11月04日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 3 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 2 条公开来源信息。",
   "market": null,
   "items": [
     {
@@ -20,14 +20,6 @@
       "url": "https://www.cls.cn/detail/2524015",
       "category": "supply",
       "publishedAt": "2026-11-03T18:12:29+08:00"
-    },
-    {
-      "title": "财联社11月3日电，国内商品期货多数收跌，原油跌超6%，纯苯、LU燃油跌超5%，集运欧线、苯乙烯、对二甲苯、生猪跌超4%，钯、苹果、瓶片、沪锡、液化气、BR橡胶跌超3%，焦煤、PTA、沪铅跌超2%。涨幅方面，不锈钢、玻璃、烧碱涨超1%。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2523689",
-      "category": "market",
-      "publishedAt": "2026-11-03T15:02:07+08:00"
     }
   ],
   "sources": [
@@ -42,5 +34,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "5bf5330df6f5edc70f50783016d6b02987476c1951a801396d0f82fc57d68843"
+  "fingerprint": "37c1b302b2d548eb84ec4366cf06edd6a0360a33e7e4fb7c800589e39c373ebc"
 }
