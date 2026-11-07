@@ -1,8 +1,8 @@
 {
   "date": "2026年11月07日",
-  "generatedAt": "2026-11-07T00:05:28+08:00",
+  "generatedAt": "2026-11-07T15:39:57+08:00",
   "title": "焦煤日报｜2026年11月07日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 4 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
   "market": null,
   "items": [
     {
@@ -12,30 +12,6 @@
       "url": "https://www.cls.cn/detail/2527393",
       "category": "supply",
       "publishedAt": "2026-11-06T16:06:48+08:00"
-    },
-    {
-      "title": "财联社11月6日电，国内商品期货多数下跌，液化气、聚乙烯、丙烯跌超3%，沪锡、鸡蛋、纯苯、集运欧线、纯碱、菜油跌超2%，国际铜、沪铜、橡胶、棕榈油、沪银、多晶硅、苯乙烯跌超1%。涨幅方面，苹果涨超5%，焦炭、碳酸锂、沪镍、红枣涨超2%。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2527296",
-      "category": "demand",
-      "publishedAt": "2026-11-06T15:02:44+08:00"
-    },
-    {
-      "title": "财联社11月6日电，国内期货主力合约多数下跌，丙烯跌超4%，塑料跌近4%，液化石油气（LPG）、聚丙烯、纯苯、鸡蛋、沪锡跌超3%，聚丙烯月均跌超2%。涨幅方面，苹果涨近5%，焦炭涨近3%，低硫燃料油（LU）、红枣涨超2%，沪镍、菜粕、焦煤、玻璃、碳酸锂涨超1%。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2527093",
-      "category": "demand",
-      "publishedAt": "2026-11-06T11:31:38+08:00"
-    },
-    {
-      "title": "财联社11月6日电，国内商品期货开盘涨跌不一，LU燃油涨超3%，苹果涨近3%，焦炭、沪镍、菜粕涨超2%，焦煤、红枣涨超1%。跌幅方面，丙烯跌超4%，沪锡、液化气跌超3%，纯苯、菜油跌超2%。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2526894",
-      "category": "demand",
-      "publishedAt": "2026-11-06T09:00:23+08:00"
     }
   ],
   "sources": [
@@ -50,5 +26,5 @@
     "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "f1ade75dfa204c3c7c79346bb28149d6c15964061f7947816c832fe974700a26"
+  "fingerprint": "c514e0cbc58a427864f546d57aa34e00813a85ba51688c3a8324bec1453dd9bd"
 }
