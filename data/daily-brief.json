@@ -1,8 +1,8 @@
 {
   "date": "2026年11月21日",
-  "generatedAt": "2026-11-21T01:04:59+08:00",
+  "generatedAt": "2026-11-21T16:40:03+08:00",
   "title": "焦煤日报｜2026年11月21日",
-  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 3 条公开来源信息。",
+  "summary": "暂无可用的 DCE 日行情；最近 24 小时汇总 1 条公开来源信息。",
   "market": null,
   "items": [
     {
@@ -12,22 +12,6 @@
       "url": "https://www.cls.cn/detail/2540405",
       "category": "supply",
       "publishedAt": "2026-11-20T19:02:55+08:00"
-    },
-    {
-      "title": "财联社11月20日电，国内商品期货收盘涨跌不一，集运欧线、焦炭、沥青涨超3%，焦煤、原油、瓶片、PTA涨超2%，BR橡胶、生猪、乙二醇、硅铁涨超1%。跌幅方面，钯、沪银跌超7%，沪金跌近5%，铂跌超4%，沪锡、红枣、沪铜跌超3%，液化气、玻璃、苹果、烧碱跌超2%。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2540006",
-      "category": "demand",
-      "publishedAt": "2026-11-20T15:02:14+08:00"
-    },
-    {
-      "title": "财联社11月20日电，国内期货主力合约涨跌不一，钯、沪银跌近9%，沪金跌近6%，铂跌超5%，沪锡跌近5%，红枣、沪铜跌超3%，涨幅方面，焦炭涨超3%，焦煤涨近3%，SC原油、沥青涨超2%，合成橡胶、集运欧线涨近2%。",
-      "summary": "财联社公开发布，涉及焦煤产业链动态。",
-      "source": "财联社",
-      "url": "https://www.cls.cn/detail/2539810",
-      "category": "demand",
-      "publishedAt": "2026-11-20T11:31:18+08:00"
     }
   ],
   "sources": [
@@ -39,8 +23,8 @@
     "国家发展改革委"
   ],
   "errors": [
-    "海关总署: HTTP Error 502: Bad Gateway",
+    "海关总署: HTTP Error 504: Gateway Time-out",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
-  "fingerprint": "3df965709f4518f2f444326a2e3c0c409f258af9815a79c0e576a571bf4b507e"
+  "fingerprint": "841782035aca4b144d4094b879a9b974afecf9dd6fb82502c5144cd0dc278ae2"
 }
