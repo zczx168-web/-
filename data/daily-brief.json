@@ -79,7 +79,7 @@
     "国家发展改革委"
   ],
   "errors": [
-    "海关总署: HTTP Error 504: Gateway Time-out",
+    "海关总署: <urlopen error _ssl.c:994: The handshake operation timed out>",
     "DCE: <urlopen error [Errno 101] Network is unreachable>"
   ],
   "fingerprint": "a55c889d99cefdfe0a944d30f1c218dc9ea4685986d31132afd454c0955b527e"
